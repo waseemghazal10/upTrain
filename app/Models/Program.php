@@ -34,4 +34,9 @@ class Program extends Model
     {
         return $this->belongsToMany(Skill::class);
     }
+
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
+    }
 }

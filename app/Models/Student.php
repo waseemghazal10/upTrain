@@ -39,4 +39,9 @@ class Student extends Model
     {
         return $this->belongsToMany(Skill::class);
     }
+
+    public function application()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

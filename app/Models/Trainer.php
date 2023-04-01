@@ -24,4 +24,9 @@ class Trainer extends Model
     {
         return $this->hasMany(Student::class);
     }
+
+    public function program()
+    {
+        return $this->hasMany(Program::class);
+    }
 }

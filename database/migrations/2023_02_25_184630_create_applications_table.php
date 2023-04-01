@@ -16,10 +16,15 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->integer('status') -> default(0);
+            $table->String('cv')->default("");
+            $table->String('details')->default("");
             $table->timestamps();
 
             $table->unsignedBigInteger('program_id');
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+
+            $table->unsignedBigInteger('student_id');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

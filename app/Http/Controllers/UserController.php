@@ -29,9 +29,7 @@ class UserController extends Controller
     function getSkills(Request $request)
     {
         $skills = Skill::all();
-        $response = [
-            'skills' => $skills
-        ];
+        $response = $skills;
 
         return response($response, 201);
     }
@@ -39,9 +37,7 @@ class UserController extends Controller
     function getFields(Request $request)
     {
         $fields = Field::all();
-        $response = [
-            'fields' => $fields
-        ];
+        $response =  $fields;
 
         return response($response, 201);
     }

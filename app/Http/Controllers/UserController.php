@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Skill;
+use App\Models\Field;
 use App\Models\skillsStudents;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +24,27 @@ use Illuminate\Auth\Events\Registered;
 
 class UserController extends Controller
 {
+
+
+    function getSkills(Request $request)
+    {
+        $skills = Skill::all();
+        $response = [
+            'skills' => $skills
+        ];
+
+        return response($response, 201);
+    }
+
+    function getFields(Request $request)
+    {
+        $fields = Field::all();
+        $response = [
+            'fields' => $fields
+        ];
+
+        return response($response, 201);
+    }
 
     function register(Request $request)
     {

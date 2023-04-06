@@ -21,13 +21,13 @@ return new class extends Migration
             $table->String('photo')->default("");
             $table->timestamps();
 
-            $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('branch_id')->nullable();;
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
 
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();;
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
-            $table->unsignedBigInteger('trainer_id');
+            $table->unsignedBigInteger('trainer_id')->nullable();;
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
         });
     }

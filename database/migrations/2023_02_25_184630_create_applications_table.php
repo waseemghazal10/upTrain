@@ -20,10 +20,10 @@ return new class extends Migration
             $table->String('details')->default("");
             $table->timestamps();
 
-            $table->unsignedBigInteger('program_id');
+            $table->unsignedBigInteger('program_id')->nullable();;
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
 
-            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('student_id')->nullable();;
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }

@@ -37,7 +37,7 @@ class Student extends Model
 
     public function skill()
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class,'skills_students','student_id','skill_id');
     }
 
     public function application()

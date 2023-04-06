@@ -28,7 +28,7 @@ return new class extends Migration
             $table->unsignedBigInteger('program_id')->nullable();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
 
-            $table->unsignedBigInteger('field_id')->nullable();
+            $table->unsignedBigInteger('field_id')->nullable();;
             $table->foreign('field_id')->references('id')->on('fields')->onDelete('cascade');
         });
     }

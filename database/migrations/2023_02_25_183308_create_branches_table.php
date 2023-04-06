@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->timestamps();
-            $table->unsignedBigInteger('field_id');
+            $table->unsignedBigInteger('field_id')->nullable();;
             $table->foreign('field_id')->references('id')->on('fields')->onDelete('cascade');
         });
     }

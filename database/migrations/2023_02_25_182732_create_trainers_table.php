@@ -19,10 +19,10 @@ return new class extends Migration
             $table->String('photo')->default("");
             $table->timestamps();
 
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();;
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();;
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
         });

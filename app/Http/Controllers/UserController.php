@@ -27,22 +27,6 @@ class UserController extends Controller
 {
 
 
-    function getSkills(Request $request)
-    {
-        $skills = Skill::all();
-        $response = $skills;
-
-        return response($response, 201);
-    }
-
-    function getFields(Request $request)
-    {
-        $fields = Field::all();
-        $response =  $fields;
-
-        return response($response, 201);
-    }
-
     function register(Request $request)
     {
         $fields = $request->validate([

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\FieldsController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\SkillsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -25,8 +28,9 @@ Route::post('/requestResetPassword', [UserController::class, 'requestReset']);
 Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);
 Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 
-Route::get('/getSkills', [UserController::class, 'getSkills']);
-Route::get('/getFields', [UserController::class, 'getFields']);
+Route::get('/getSkills', [SkillsController::class, 'getSkills']);
+Route::get('/getFields', [FieldsController::class, 'getFields']);
+Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

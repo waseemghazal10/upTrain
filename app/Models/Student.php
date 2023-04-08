@@ -9,6 +9,17 @@ class Student extends Model
 {
     use HasFactory;
 
+    public function getPhotoAttribute()
+    {
+        if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {
+            return "";
+        }
+    
+        $image = asset('studentProfile/' . $this->attributes['photo']);
+        return $image;
+    }
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

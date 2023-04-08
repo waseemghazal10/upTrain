@@ -13,6 +13,7 @@ use App\Models\Student;
 use App\Models\Skill;
 use App\Models\Field;
 use App\Models\skillsStudents;
+use App\Models\Trainer;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
@@ -174,7 +175,6 @@ class UserController extends Controller
         $user->verification_token = bcrypt($code);
         $user->save();
         $request->session()->put('verification_' . $user->id, time());
-        error_log($request->session()->get('verification_1'));
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
         $email->setSubject("Verify Your Email");
@@ -192,6 +192,206 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response([], 400);
         }
+    }
+
+    function login(Request $request)
+    {
+        $fields = $request->validate(
+            [
+            'email' => 'required|email',
+            'password' => 'required'
+            ],
+            [
+            'required' => 'field-required',
+            'email.email' => 'email-format',
+            ]
+        );
+
+        $user = User::where('email', $fields['email'])->first();
+        // error_log($user->student);
+        if (!$user || !Hash::check($fields['password'], $user->password)) {
+            $response = [
+                'errors' => [
+                    'message' => array('credentials-invalid')
+                ]
+            ];
+        return response($response, 400);
+        }
+
+        $user->tokens()->delete();
+
+        $student = Student::where ('user_id',$user->id)->first();
+        $trainer = Trainer::where ('user_id',$user->id)->first();
+
+        if ($student){
+
+            if ($user->email_verified_at !== null) {
+                $token = $user->createToken('upTrainToken')->plainTextToken;
+                // error_log($token);
+                $response = [
+                    'user' => $user,
+                    'student'=>$student,
+                    'token' => $token
+                ];
+            } else {
+                $response = [
+                    'user' => $user,
+                    'student'=>$student
+                ];
+            }
+        }
+        else if ($trainer){
+
+            if ($user->email_verified_at !== null) {
+                $token = $user->createToken('upTrainToken')->plainTextToken;
+                // error_log($token);
+                $response = [
+                    'user' => $user,
+                    'trainer'=>$trainer,
+                    'token' => $token
+                ];
+            } else {
+                $response = [
+                    'user' => $user,
+                    'trainer'=>$trainer
+                ];
+            }
+
+        }
+        return response($response, 201);
+    }
+
+    function requestReset(Request $request)
+    {
+        $fields = $request->validate(
+            [
+                'email' => 'required|email',
+            ],
+            [
+                'required' => 'field-required',
+                'email.email' => 'email-format',
+            ]
+        );
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $code = random_int(0, 9999);
+            $code = str_pad($code, 4, 0, STR_PAD_LEFT);
+            $user->reset_token = bcrypt($code);
+            $user->save();
+            $request->session()->put('reset_' . $user->id, time());
+            $email = new \SendGrid\Mail\Mail();
+            $email->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+            $email->setSubject("Verify Your Email");
+            $email->addTo($user->email, $user->first_name . ' ' . $user->last_name);
+            $email->addContent(
+                "text/html", view('emails.verification', ['code' => $code])->render()
+            );
+            $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+            try {
+                $sendgrid->send($email);
+                $response = [
+                    'message' => 'Email sent successfully',
+                    'email' => $user->email
+                ];
+                return response($response, 201);
+            } catch (Exception $e) {
+                return response([], 400);
+            }
+        } else {
+            $response = [
+                'errors' => [
+                    'message' => array('email-not-found')
+                ]
+            ];
+            return response($response, 404);
+        }
+    }
+
+    function verifyResetPassword(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+
+        $fields = $request->validate(
+            [
+                'code' => 'required|size:6|regex:/^\d{6}$/',
+            ],
+            [
+                'required' => 'field-required',
+                'code.size' => 'invalid-token',
+                'code.regex' => 'invalid-token',
+            ]
+        );
+        if (!session('reset_' . $user->id) || (session('reset_' . $user->id) && time() - session('reset_' . $user->id) > 600)) {
+            $response = [
+                'errors' => [
+                    'message' => array('expired-token')
+                ]
+            ];
+            return response($response, 400);
+        }
+        if (!Hash::check($request->code, $user->reset_token)) {
+            $response = [
+                'errors' => [
+                    'message' => array('invalid-token')
+                ]
+            ];
+            return response($response, 400);
+        }
+        $token = $user->createToken('sakankomToken')->plainTextToken;
+        $response = [
+            'message' => 'Verified code successfully',
+            'token' => $token
+        ];
+        return response($response, 201);
+    }
+
+    function resetPassword(Request $request)
+    {
+        $fields = $request->validate(
+            [
+                'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/|confirmed'
+            ],
+            [
+                'password.required' => 'field-required',
+                'password.confirmed' => 'password-not-match',
+                'password.min' => 'password-length',
+                'password.max' => 'password-length',
+                'password.regex' => 'password-format',
+            ]
+        );
+
+
+        $user = auth()->user();
+
+        if (Hash::check($fields['password'], $user->password)) {
+            $response = [
+                'errors' => [
+                    'message' => array('password-duplicate')
+                ]
+            ];
+            return response($response, 400);
+        }
+        $user->password = bcrypt($fields['password'] . '');
+        $user->save();
+        $user->tokens()->delete();
+
+
+        $response = [
+            'message' => 'Password changed successfully'
+        ];
+
+
+        return response($response, 201);
+    }
+
+    function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+
+        $response = [
+            'message' => 'logged out'
+        ];
+        return response($response, 201);
     }
 
 }

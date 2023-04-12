@@ -14,7 +14,7 @@ class Student extends Model
         if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {
             return "";
         }
-    
+
         $image = asset('studentProfile/' . $this->attributes['photo']);
         return $image;
     }

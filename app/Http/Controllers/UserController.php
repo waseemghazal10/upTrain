@@ -51,7 +51,9 @@ class UserController extends Controller
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
         ]);
-
+        foreach ($fields as $field){
+            error_log($field);
+        }
         $user = User::create([
             'email' => $fields['email'],
             'first_name' => $fields['firstName'],
@@ -66,10 +68,12 @@ class UserController extends Controller
 
         $image = $fields['picture'];
         $imageEncoded = $image['data'];
+        error_log($imageEncoded);
         $imageEncoded = str_replace('data:image/jpeg;base64,', '', $imageEncoded);
         $imageEncoded = str_replace(' ', '+', $imageEncoded);
         $imageDecoded = base64_decode($imageEncoded);
         $name = time() . '_' . $user->id . '.jpg';
+        error_log($name);
         Storage::disk('studentProfile')->put($name, $imageDecoded);
         $student->photo = $name;
         // $student->photo = $fields['picture'];
@@ -80,7 +84,7 @@ class UserController extends Controller
         $user->save();
         $student->save();
 
-        $student_id = Student::where('user_id',$user->id)->get('id');
+        // $student_id = Student::where('user_id',$user->id)->get('id');`   
         $skills_id = explode(',',$fields['skills']);
         $student->skill()->attach($skills_id);
 
@@ -99,7 +103,11 @@ class UserController extends Controller
                 'user' => $user,
                 'student'=>$student
             ];
-            return response($response, 201);
+            foreach ($response as $respons){
+                // error_log($respons);
+            }
+            return response()->json($response,201);
+            // return response()->json($response, 201, ['Content-Type' => 'application/json', 'Charset' => 'UTF-8']);
         } catch (Exception $e) {
             return response([], 400);
         }

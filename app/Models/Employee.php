@@ -10,6 +10,13 @@ class Employee extends Model
     use HasFactory;
 
 
+    protected $fillable = [
+        'phone_number',
+        'photo',
+        'verification_token'
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

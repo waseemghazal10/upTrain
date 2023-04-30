@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FieldsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SkillsController;
@@ -37,6 +38,9 @@ Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
 
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::post('/addCompany', [CompanyController::class, 'addCompany']);
+
+Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
+Route::post('/addEmployee', [EmployeeController::class, 'addEmployee']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);

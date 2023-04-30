@@ -13,4 +13,9 @@ class Task extends Model
     {
         return $this->belongsToMany(Student::class);
     }
+
+    public function trainer()
+    {
+        return $this->belongsTo(Trainer::class);
+    }
 }

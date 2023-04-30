@@ -51,9 +51,9 @@ class UserController extends Controller
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
         ]);
-        foreach ($fields as $field){
-            error_log($field);
-        }
+        // foreach ($fields as $field){
+        //     error_log($field);
+        // }
         $user = User::create([
             'email' => $fields['email'],
             'first_name' => $fields['firstName'],
@@ -67,14 +67,17 @@ class UserController extends Controller
         $student->field_id = $fields['field'];
 
         $image = $fields['picture'];
-        $imageEncoded = $image['data'];
-        error_log($imageEncoded);
-        $imageEncoded = str_replace('data:image/jpeg;base64,', '', $imageEncoded);
-        $imageEncoded = str_replace(' ', '+', $imageEncoded);
-        $imageDecoded = base64_decode($imageEncoded);
+        $imageData = file_get_contents($image);
+
+        // $imageEncoded = $image['data'];
+        error_log($imageData);
+        // $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
+        // $imageData = str_replace(' ', '+', $imageData);
+        // $imageData = base64_decode($imageData);
         $name = time() . '_' . $user->id . '.jpg';
+
         error_log($name);
-        Storage::disk('studentProfile')->put($name, $imageDecoded);
+        Storage::disk('studentProfile')->put($name, $imageData);
         $student->photo = $name;
         // $student->photo = $fields['picture'];
 
@@ -384,6 +387,11 @@ class UserController extends Controller
             'message' => 'logged out'
         ];
         return response($response, 201);
+    }
+
+    public function loginUser(Request $request)
+    {
+        return view('logIn.loginUser');
     }
 
 }

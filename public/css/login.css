@@ -1,0 +1,65 @@
+.loginBackground {
+    background-image: url("/images/loginBackground.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.h-fit {
+    height: fit-content;
+}
+
+.bg-gray-opacity {
+    background: rgb(85, 85, 85, 0.5)
+}
+
+.opacity-h {
+    opacity: 0.5;
+}
+
+.opacity-1 {
+    opacity: 1;
+}
+
+#loginContainer {
+    border-radius: 20px;
+}
+
+input[type="text"] {
+    border-radius: 20px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+}
+
+input[type="password"] {
+    border-radius: 20px;
+    border-color: rgb(198, 198, 198);
+    border-style: solid;
+}
+
+#login {
+    border-radius: 20px;
+}
+
+button {
+    border-radius: 20px !important;
+}
+
+.btn-facebook {
+    background-color: #4267B2;
+}
+
+h3 {
+    color: #4267B2;
+}
+
+.border-red {
+    border-color: red !important;
+    border-width: thick;
+    transition: border-width 0.2s linear;
+}
+
+.btn-primary_1{
+    color: #fff;
+    background-color: #00337C;
+    border-color: #00337C;
+}

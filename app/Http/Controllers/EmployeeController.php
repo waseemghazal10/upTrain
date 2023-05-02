@@ -12,7 +12,7 @@ class EmployeeController extends Controller
     //
     function getEmployees(Request $request)
     {
-        $employees = Employee::where('role',1)->get();
+        $employees = Employee::where('role',1)->join('users','users.id','=','employees.user_id')->get();
         $response = $employees;
 
         return response($response, 201);
@@ -23,8 +23,8 @@ class EmployeeController extends Controller
     {
         $fields = $request->validate([
             'email' => 'required|unique:users,email|email',
-            'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
-            'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'first_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'last_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'phone' => 'required|unique:employees,phone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
@@ -35,8 +35,8 @@ class EmployeeController extends Controller
             'password.regex' => 'password-format',
             'email.unique' => 'email-exists',
             'email.email' => 'email-format',
-            'firstName.regex' => 'name-format',
-            'lastName.regex' => 'name-format',
+            'first_name.regex' => 'name-format',
+            'last_name.regex' => 'name-format',
             'phone.size' => 'phone-format',
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
@@ -44,8 +44,8 @@ class EmployeeController extends Controller
 
         $user = User::create([
             'email' => $fields['email'],
-            'first_name' => $fields['firstName'],
-            'last_name' => $fields['lastName'],
+            'first_name' => $fields['first_name'],
+            'last_name' => $fields['last_name'],
             'password' => bcrypt($fields['password']),
         ]);
 

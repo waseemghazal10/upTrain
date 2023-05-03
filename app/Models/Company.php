@@ -21,6 +21,22 @@ class Company extends Model
         'verification_token'
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function getPhotoAttribute()
+    {
+        if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {
+            return "";
+        }
+
+        $image = asset('companyProfile/' . $this->attributes['photo']);
+        return $image;
+    }
+
+
     public function trainer()
     {
         return $this->hasMany(Trainer::class);

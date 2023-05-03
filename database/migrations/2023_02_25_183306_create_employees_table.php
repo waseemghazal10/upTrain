@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->String('phone_number');
-            $table->String('photo')->default("");
-            $table->integer('role') -> default(0);
+            $table->String('ePhone_number');
+            $table->String('ePhoto')->default("");
+            $table->integer('eRole') -> default(0);
             $table->rememberToken();
             $table->timestamps();
 

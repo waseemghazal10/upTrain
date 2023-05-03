@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->String('photo')->default("");
-            $table->string('description')->default("");
-            $table->string('webSite');
-            $table->string('location');
+            $table->string('cName');
+            $table->string('cEmail')->unique();
+            $table->string('cPassword');
+            $table->String('cPhoto')->default("");
+            $table->string('cDescription')->default("");
+            $table->string('cWebSite');
+            $table->string('cLocation');
             $table->string('verification_token') -> default("");
             $table->rememberToken();
             $table->timestamps();

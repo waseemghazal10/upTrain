@@ -15,15 +15,16 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->integer('status');
-            $table->string('title');
-            $table->string('description')->default("");
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->integer('taStatus');
+            $table->string('taTitle');
+            $table->string('taDescription')->default("");
+            $table->date('taStart_date');
+            $table->date('taEnd_date');
             $table->timestamps();
 
 
-            
+            $table->unsignedBigInteger('trainer_id')->nullable();
+            $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
         });
     }
 

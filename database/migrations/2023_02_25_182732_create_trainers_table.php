@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('trainers', function (Blueprint $table) {
             $table->id();
-            $table->String('phone_number');
-            $table->String('photo')->default("");
+            $table->String('tPhone_number');
+            $table->String('tPhoto')->default("");
             $table->timestamps();
 
             $table->unsignedBigInteger('user_id')->nullable();;

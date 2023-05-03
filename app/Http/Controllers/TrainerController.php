@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
+use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
+use PhpParser\Builder\Trait_;
 
-class EmployeeController extends Controller
+class TrainerController extends Controller
 {
     //
-    function getEmployees(Request $request)
+    function getTrainers(Request $request)
     {
-        $employees = Employee::where('role',1)->join('users','users.id','=','employees.user_id')->get();
-        $response = $employees;
+        $trainers = Trainer::join('users','users.id','=','trainers.user_id')->get();
+        $response = $trainers;
 
         return response($response, 201);
     }
 
 
-    function addEmployee(Request $request)
+    function addTrainer(Request $request)
     {
         $fields = $request->validate([
             'email' => 'required|unique:users,email|email',
@@ -49,11 +51,10 @@ class EmployeeController extends Controller
             'password' => bcrypt($fields['password']),
         ]);
 
-        $employee = new Employee();
-        $employee->ePhone_number = $fields['phone'];
-        $employee->user_id = $user->id;
-        $employee->eRole = 1;
-        // $employee->photo = $fields['photo'];
+        $trainer = new Trainer();
+        $trainer->tPhone_number = $fields['phone'];
+        $trainer->user_id = $user->id;
+        // $trainer->tPhoto = $fields['photo'];
 
 
         $image = $fields['photo'];
@@ -62,18 +63,18 @@ class EmployeeController extends Controller
         $name = time() . '_' . $user->id . '.jpg';
 
         error_log($name);
-        Storage::disk('employeeProfile')->put($name, $imageData);
-        $employee->ePhoto = $name;
+        Storage::disk('trainerProfile')->put($name, $imageData);
+        $trainer->tPhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
         $user->verification_token = bcrypt($code);
         $user->save();
-        $employee->save();
+        $trainer->save();
 
         $response = [
             'user' => $user,
-            'employee' => $employee
+            'trainer' => $trainer
         ];
 
         return response($response, 201);

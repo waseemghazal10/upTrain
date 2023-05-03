@@ -39,12 +39,12 @@ class CompanyController extends Controller
         ]);
 
         $company = Company::create([
-            'email' => $fields['email'],
-            'name' => $fields['name'],
-            'description' => $fields['description'],
-            'password' => bcrypt($fields['password']),
-            'webSite' => $fields['webSite'],
-            'location' => $fields['location'],
+            'cEmail' => $fields['email'],
+            'cName' => $fields['name'],
+            'cDescription' => $fields['description'],
+            'cPassword' => bcrypt($fields['password']),
+            'cWebSite' => $fields['webSite'],
+            'cLocation' => $fields['location'],
             // 'photo' => $fields['photo']
         ]);
 
@@ -56,7 +56,7 @@ class CompanyController extends Controller
 
         error_log($name);
         Storage::disk('companyProfile')->put($name, $imageData);
-        $company->photo = $name;
+        $company->cPhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

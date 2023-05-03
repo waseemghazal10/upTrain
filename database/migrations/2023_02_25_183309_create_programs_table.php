@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
-            $table->String('title');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->String('photo')->default("");
+            $table->String('pTitle');
+            $table->date('pStart_date');
+            $table->date('pEnd_date');
+            $table->String('pPhoto')->default("");
+            $table->string('pDescription')->default("");
+            $table->string('pDetails')->default("");
             $table->timestamps();
 
             $table->unsignedBigInteger('branch_id')->nullable();;

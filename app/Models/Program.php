@@ -10,6 +10,27 @@ class Program extends Model
     use HasFactory;
 
 
+    protected $fillable = [
+        'title',
+        'start_date',
+        'end_date',
+        'photo',
+        'branch_id',
+        'company_id',
+        'trainer_id'
+    ];
+
+    public function getPhotoAttribute()
+    {
+        if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {
+            return "";
+        }
+
+        $image = asset('programProfile/' . $this->attributes['photo']);
+        return $image;
+    }
+
+
     public function student()
     {
         return $this->hasMany(Student::class);

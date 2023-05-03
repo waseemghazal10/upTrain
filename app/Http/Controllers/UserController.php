@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\VerificationMail;
+use App\Models\Company;
+use App\Models\Employee;
 use App\Models\NotificationToken;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,9 +53,9 @@ class UserController extends Controller
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
         ]);
-        // foreach ($fields as $field){
-        //     error_log($field);
-        // }
+        foreach ($fields as $field){
+            error_log($field);
+        }
         $user = User::create([
             'email' => $fields['email'],
             'first_name' => $fields['firstName'],
@@ -62,24 +64,20 @@ class UserController extends Controller
         ]);
 
         $student = new Student();
-        $student->phone_number = $fields['phone'];
+        $student->sPhone_number = $fields['phone'];
         $student->user_id = $user->id;
         $student->field_id = $fields['field'];
 
-        $image = $fields['picture'];
-        $imageData = file_get_contents($image);
+        // $image = $fields['picture'];
+        // $imageData = file_get_contents($image);
 
-        // $imageEncoded = $image['data'];
-        error_log($imageData);
-        // $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
-        // $imageData = str_replace(' ', '+', $imageData);
-        // $imageData = base64_decode($imageData);
-        $name = time() . '_' . $user->id . '.jpg';
+        // error_log($imageData);
+        // $name = time() . '_' . $user->id . '.jpg';
 
-        error_log($name);
-        Storage::disk('studentProfile')->put($name, $imageData);
-        $student->photo = $name;
-        // $student->photo = $fields['picture'];
+        // error_log($name);
+        // Storage::disk('studentProfile')->put($name, $imageData);
+        // $student->sPhoto = $name;
+        $student->photo = $fields['picture'];
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -87,7 +85,6 @@ class UserController extends Controller
         $user->save();
         $student->save();
 
-        // $student_id = Student::where('user_id',$user->id)->get('id');`   
         $skills_id = explode(',',$fields['skills']);
         $student->skill()->attach($skills_id);
 
@@ -203,55 +200,102 @@ class UserController extends Controller
         );
 
         $user = User::where('email', $fields['email'])->first();
+        $company = Company::where('email',$fields['email'])->first();
         // error_log($user->student);
-        if (!$user || !Hash::check($fields['password'], $user->password)) {
-            $response = [
-                'errors' => [
-                    'message' => array('credentials-invalid')
-                ]
-            ];
-        return response($response, 400);
+
+        if($user){
+            if (!$user || !Hash::check($fields['password'], $user->password)) {
+                $response = [
+                    'errors' => [
+                        'message' => array('credentials-invalid')
+                    ]
+                ];
+            return response($response, 400);
+            }
+
+            $user->tokens()->delete();
+
+            $student = Student::where ('user_id',$user->id)->first();
+            $trainer = Trainer::where ('user_id',$user->id)->first();
+            $employee = Employee::where ('user_id',$user->id)->first();
+
+            if ($student){
+
+                if ($user->email_verified_at !== null) {
+                    $token = $user->createToken('upTrainToken')->plainTextToken;
+                    // error_log($token);
+                    $response = [
+                        'user' => $user,
+                        'student'=>$student,
+                        'token' => $token
+                    ];
+                } else {
+                    $response = [
+                        'user' => $user,
+                        'student'=>$student
+                    ];
+                }
+            }
+            else if ($trainer){
+
+                if ($user->email_verified_at !== null) {
+                    $token = $user->createToken('upTrainToken')->plainTextToken;
+                    // error_log($token);
+                    $response = [
+                        'user' => $user,
+                        'trainer'=>$trainer,
+                        'token' => $token
+                    ];
+                } else {
+                    $response = [
+                        'user' => $user,
+                        'trainer'=>$trainer
+                    ];
+                }
+
+            }
+            else if ($employee){
+
+                if ($user->email_verified_at !== null) {
+                    $token = $user->createToken('upTrainToken')->plainTextToken;
+                    // error_log($token);
+                    $response = [
+                        'user' => $user,
+                        'employee'=>$employee,
+                        'token' => $token
+                    ];
+                } else {
+                    $response = [
+                        'user' => $user,
+                        'employee'=>$employee
+                    ];
+                }
+            }
+
         }
+        else if ($company){
+            if (!$company || !Hash::check($fields['password'], $company->password)) {
+                $response = [
+                    'errors' => [
+                        'message' => array('credentials-invalid')
+                    ]
+                ];
+            return response($response, 400);
+            }
+            // $company->tokens()->delete();
 
-        $user->tokens()->delete();
-
-        $student = Student::where ('user_id',$user->id)->first();
-        $trainer = Trainer::where ('user_id',$user->id)->first();
-
-        if ($student){
-
-            if ($user->email_verified_at !== null) {
-                $token = $user->createToken('upTrainToken')->plainTextToken;
+            if ($company->email_verified_at !== null) {
+                $token = $company->createToken('upTrainToken')->plainTextToken;
                 // error_log($token);
                 $response = [
-                    'user' => $user,
-                    'student'=>$student,
+                    'company'=>$company,
                     'token' => $token
                 ];
             } else {
                 $response = [
-                    'user' => $user,
-                    'student'=>$student
+                    'company'=>$company
                 ];
             }
-        }
-        else if ($trainer){
-
-            if ($user->email_verified_at !== null) {
-                $token = $user->createToken('upTrainToken')->plainTextToken;
-                // error_log($token);
-                $response = [
-                    'user' => $user,
-                    'trainer'=>$trainer,
-                    'token' => $token
-                ];
-            } else {
-                $response = [
-                    'user' => $user,
-                    'trainer'=>$trainer
-                ];
-            }
-
         }
         return response($response, 201);
     }

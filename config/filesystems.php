@@ -65,6 +65,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'programProfile' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/programProfile'),
+            'url' => env('APP_URL') . '/programProfile',
+            'visibility' => 'public',
+        ],
+
+        'trainerProfile' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/trainerProfile'),
+            'url' => env('APP_URL') . '/trainerProfile',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -16,6 +16,21 @@ class Employee extends Model
         'verification_token'
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    public function getPhotoAttribute()
+    {
+        if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {
+            return "";
+        }
+
+        $image = asset('employeeProfile/' . $this->attributes['photo']);
+        return $image;
+    }
+
 
     public function user()
     {

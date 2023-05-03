@@ -35,7 +35,7 @@ class UserController extends Controller
             'email' => 'required|unique:users,email|email',
             'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
-            'phone' => 'required|unique:students,phone_number|size:10|regex:/^05\d{8}$/',
+            'phone' => 'required|unique:students,sPhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'picture' => 'required',
             'skills' => 'required',
@@ -77,7 +77,7 @@ class UserController extends Controller
         // error_log($name);
         // Storage::disk('studentProfile')->put($name, $imageData);
         // $student->sPhoto = $name;
-        $student->photo = $fields['picture'];
+        $student->sPhoto = $fields['picture'];
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

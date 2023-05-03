@@ -11,10 +11,12 @@ class Program extends Model
 
 
     protected $fillable = [
-        'title',
-        'start_date',
-        'end_date',
-        'photo',
+        'pTitle',
+        'pStart_date',
+        'pEnd_date',
+        'pPhoto',
+        'pDescription',
+        'pDetails',
         'branch_id',
         'company_id',
         'trainer_id'

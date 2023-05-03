@@ -9,6 +9,12 @@ class Trainer extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'tPhone_number',
+        'tPhoto',
+        'user_id',
+        'company_id',
+    ];
 
     public function user()
     {

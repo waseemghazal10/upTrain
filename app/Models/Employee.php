@@ -11,13 +11,14 @@ class Employee extends Model
 
 
     protected $fillable = [
-        'phone_number',
-        'photo',
+        'ePhone_number',
+        'ePhoto',
+        'eRole',
+        'user_id',
         'verification_token'
     ];
 
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 

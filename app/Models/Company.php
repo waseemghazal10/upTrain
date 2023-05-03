@@ -11,18 +11,18 @@ class Company extends Model
 
 
     protected $fillable = [
-        'email',
-        'name',
-        'password',
-        'webSite',
-        'location',
-        'description',
-        'photo',
+        'cEmail',
+        'cName',
+        'cPassword',
+        'cWebSite',
+        'cLocation',
+        'cDescription',
+        'cPhoto',
         'verification_token'
     ];
 
     protected $hidden = [
-        'password',
+        'cPassword',
         'remember_token',
     ];
 

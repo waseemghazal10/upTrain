@@ -27,7 +27,7 @@ class TrainerController extends Controller
             'email' => 'required|unique:users,email|email',
             'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
-            'phone' => 'required|unique:employees,phone_number|size:10|regex:/^05\d{8}$/',
+            'phone' => 'required|unique:trainers,tPhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
         ], [

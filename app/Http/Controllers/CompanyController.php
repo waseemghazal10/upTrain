@@ -21,7 +21,7 @@ class CompanyController extends Controller
     function addCompany(Request $request)
     {
         $fields = $request->validate([
-            'email' => 'required|unique:companies,email|email',
+            'email' => 'required|unique:companies,cEmail|email',
             'name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
@@ -45,7 +45,7 @@ class CompanyController extends Controller
             'cPassword' => bcrypt($fields['password']),
             'cWebSite' => $fields['webSite'],
             'cLocation' => $fields['location'],
-            // 'photo' => $fields['photo']
+            // 'cPhoto' => $fields['photo']
         ]);
 
 

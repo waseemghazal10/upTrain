@@ -9,6 +9,16 @@ class Student extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'sPhone_number',
+        'sPhoto',
+        'user_id',
+        'trainer_id',
+        'program_id',
+        'field_id'
+    ];
+
+
     public function getPhotoAttribute()
     {
         if (!isset($this->attributes['photo']) || $this->attributes['photo'] === null || $this->attributes['photo'] === '') {

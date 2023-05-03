@@ -25,7 +25,7 @@ class EmployeeController extends Controller
             'email' => 'required|unique:users,email|email',
             'first_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'last_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
-            'phone' => 'required|unique:employees,phone_number|size:10|regex:/^05\d{8}$/',
+            'phone' => 'required|unique:employees,ePhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
         ], [
@@ -53,7 +53,7 @@ class EmployeeController extends Controller
         $employee->ePhone_number = $fields['phone'];
         $employee->user_id = $user->id;
         $employee->eRole = 1;
-        // $employee->photo = $fields['photo'];
+        // $employee->ePhoto = $fields['photo'];
 
 
         $image = $fields['photo'];

@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Storage;
 class ProgramController extends Controller
 {
     //
-    function getPrograms(Request $request)
-    {
-        $programs = Program::join('branches','branches.id','=','programs.branch_id')->get();...
-        $response = $programs;
+    // function getPrograms(Request $request)
+    // {
+    //     $programs = Program::join('branches','branches.id','=','programs.branch_id')->get();...
+    //     $response = $programs;
 
-        return response($response, 201);
-    }
+    //     return response($response, 201);
+    // }
 
     function addProgram(Request $request)
     {
@@ -25,8 +25,10 @@ class ProgramController extends Controller
             'start_date' => 'required',
             'end_date' => 'required',
             'photo' => 'required',
+            'details' => 'required',
             'branch_id' => 'required',
             'company_id' => 'required',
+            'trainer_id' => 'required',
             'skills' => 'required'
         ], [
             'required' => 'field-required'
@@ -36,8 +38,10 @@ class ProgramController extends Controller
             'pTitle' => $fields['title'],
             'pStart_date' => $fields['start_date'],
             'pEnd_date' => $fields['end_date'],
+            'pDetails' => $fields['details'],
             'branch_id' => $fields['branch_id'],
             'company_id' => $fields['company_id'],
+            'trainer_id' => $fields['trainer_id'],
             'pPhoto' => $fields['photo']
         ]);
 

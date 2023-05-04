@@ -19,7 +19,6 @@ return new class extends Migration
             $table->date('pStart_date');
             $table->date('pEnd_date');
             $table->String('pPhoto')->default("");
-            $table->string('pDescription')->default("");
             $table->string('pDetails')->default("");
             $table->timestamps();
 

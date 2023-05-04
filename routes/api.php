@@ -38,7 +38,7 @@ Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches', [BranchController::class, 'getbranches']);
 
 Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
-Route::post('/admin/addProgram', [ProgramController::class, 'addProgram']);
+Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
@@ -48,7 +48,7 @@ Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
 
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
-Route::post('/admin/addTrainer', [TrainerController::class, 'addTrainer']);
+Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

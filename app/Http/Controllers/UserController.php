@@ -36,7 +36,7 @@ class UserController extends Controller
             'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'phone' => 'required|unique:students,sPhone_number|size:10|regex:/^05\d{8}$/',
-            'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
+            'password' => 'required|min:8|max:32|',
             'picture' => 'required',
             'skills' => 'required',
             'field' => 'required'
@@ -53,9 +53,9 @@ class UserController extends Controller
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
         ]);
-        foreach ($fields as $field){
-            error_log($field);
-        }
+        // foreach ($fields as $field){
+        //     error_log($field);
+        // }
         $user = User::create([
             'email' => $fields['email'],
             'first_name' => $fields['firstName'],
@@ -67,6 +67,7 @@ class UserController extends Controller
         $student->sPhone_number = $fields['phone'];
         $student->user_id = $user->id;
         $student->field_id = $fields['field'];
+        $student->sPhoto = $fields['picture'];
 
         // $image = $fields['picture'];
         // $imageData = file_get_contents($image);
@@ -77,7 +78,7 @@ class UserController extends Controller
         // error_log($name);
         // Storage::disk('studentProfile')->put($name, $imageData);
         // $student->sPhoto = $name;
-        $student->sPhoto = $fields['picture'];
+
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

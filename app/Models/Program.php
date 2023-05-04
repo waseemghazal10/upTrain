@@ -55,7 +55,7 @@ class Program extends Model
 
     public function skill()
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class,'skills_programs','program_id','skill_id');
     }
 
     public function trainer()

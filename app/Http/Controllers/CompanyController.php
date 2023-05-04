@@ -23,7 +23,7 @@ class CompanyController extends Controller
         $fields = $request->validate([
             'email' => 'required|unique:companies,cEmail|email',
             'name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
-            'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
+            'password' => 'required|min:8|max:32|',
             'photo' => 'required',
             'description' => 'required',
             'webSite' => 'required',
@@ -45,18 +45,18 @@ class CompanyController extends Controller
             'cPassword' => bcrypt($fields['password']),
             'cWebSite' => $fields['webSite'],
             'cLocation' => $fields['location'],
-            // 'cPhoto' => $fields['photo']
+            'cPhoto' => $fields['photo']
         ]);
 
 
-        $image = $fields['photo'];
-        $imageData = file_get_contents($image);
+        // $image = $fields['photo'];
+        // $imageData = file_get_contents($image);
 
-        $name = time() . '_' . $company->id . '.jpg';
+        // $name = time() . '_' . $company->id . '.jpg';
 
-        error_log($name);
-        Storage::disk('companyProfile')->put($name, $imageData);
-        $company->cPhoto = $name;
+        // error_log($name);
+        // Storage::disk('companyProfile')->put($name, $imageData);
+        // $company->cPhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

@@ -9,14 +9,16 @@ use Illuminate\Support\Facades\Storage;
 
 class ProgramController extends Controller
 {
-    //
-    // function getPrograms(Request $request)
-    // {
-    //     $programs = Program::join('branches','branches.id','=','programs.branch_id')->get();...
-    //     $response = $programs;
 
-    //     return response($response, 201);
-    // }
+    function getPrograms(Request $request)
+    {
+        $programs = Program::join('branches','branches.id','=','programs.branch_id')
+        ->join('companies','companies.id','=','programs.company_id')
+        ->join('trainers','trainers.id','=','programs.trainer_id')->get();
+        $response = $programs;
+
+        return response($response, 201);
+    }
 
     function addProgram(Request $request)
     {

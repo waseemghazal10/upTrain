@@ -20,16 +20,16 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedBigInteger('trainer_id')->nullable();
-            $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
+            $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
 
             $table->unsignedBigInteger('program_id')->nullable();
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('set null');
 
             $table->unsignedBigInteger('field_id')->nullable();;
-            $table->foreign('field_id')->references('id')->on('fields')->onDelete('cascade');
+            $table->foreign('field_id')->references('id')->on('fields')->onDelete('set null');
         });
     }
 

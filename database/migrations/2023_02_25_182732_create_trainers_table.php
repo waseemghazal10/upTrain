@@ -20,10 +20,10 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unsignedBigInteger('user_id')->nullable();;
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->unsignedBigInteger('company_id')->nullable();;
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
 
         });
     }

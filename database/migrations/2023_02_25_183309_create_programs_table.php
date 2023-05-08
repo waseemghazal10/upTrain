@@ -23,13 +23,13 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unsignedBigInteger('branch_id')->nullable();;
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
 
             $table->unsignedBigInteger('company_id')->nullable();;
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
 
             $table->unsignedBigInteger('trainer_id')->nullable();;
-            $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
+            $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
         });
     }
 

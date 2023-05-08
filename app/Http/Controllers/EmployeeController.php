@@ -53,17 +53,17 @@ class EmployeeController extends Controller
         $employee->ePhone_number = $fields['phone'];
         $employee->user_id = $user->id;
         $employee->eRole = 1;
-        // $employee->ePhoto = $fields['photo'];
+        $employee->ePhoto = $fields['photo'];
 
 
-        $image = $fields['photo'];
-        $imageData = file_get_contents($image);
+        // $image = $fields['photo'];
+        // $imageData = file_get_contents($image);
 
-        $name = time() . '_' . $user->id . '.jpg';
+        // $name = time() . '_' . $user->id . '.jpg';
 
-        error_log($name);
-        Storage::disk('employeeProfile')->put($name, $imageData);
-        $employee->ePhoto = $name;
+        // error_log($name);
+        // Storage::disk('employeeProfile')->put($name, $imageData);
+        // $employee->ePhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

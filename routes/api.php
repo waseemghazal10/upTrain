@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FieldsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SkillsController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TrainerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,24 +34,30 @@ Route::post('/requestResetPassword', [UserController::class, 'requestReset']);
 Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);
 Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 
+Route::get('/getProgramStudents/{id}', [StudentController::class, 'getProgramStudents']);
+Route::get('/getTrainerStudents/{id}', [StudentController::class, 'getTrainerStudents']);
+Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStudents']);
+
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches', [BranchController::class, 'getbranches']);
-
+Route::get('/getStudents', [StudentController::class, 'getStudents']);
 Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
-Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
-
-
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
-Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
-
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
-Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
-
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
-Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
+
+Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);
+
+    Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
+
+    Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
+
+    Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
+
+    Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
 });

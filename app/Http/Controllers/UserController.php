@@ -120,6 +120,7 @@ class UserController extends Controller
         $fields = $request->validate(
             [
                 'code' => 'required|size:6|regex:/^\d{6}$/',
+                'email' => 'required',
             ],
             [
                 'required' => 'field-required',
@@ -130,7 +131,7 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!session('verification_' . $user->id) || (session('verification_' . $user->id) && time() - session('verification_' . $user->id) > 600)) {
-            error_log($request->session()->get('verification_1') . 'hi');
+            // error_log($request->session()->get('verification_1') . 'hi');
             $response = [
                 'errors' => [
                     'message' => array('expired-token')

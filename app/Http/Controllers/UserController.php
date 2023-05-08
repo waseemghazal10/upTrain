@@ -128,6 +128,7 @@ class UserController extends Controller
                 'code.regex' => 'invalid-token',
             ]
         );
+        error_log($request->email);
         $user = User::where('email', $request->email)->first();
 
         if (!session('verification_' . $user->id) || (session('verification_' . $user->id) && time() - session('verification_' . $user->id) > 600)) {
@@ -202,8 +203,7 @@ class UserController extends Controller
         );
 
         $user = User::where('email', $fields['email'])->first();
-        $company = Company::where('email',$fields['email'])->first();
-        // error_log($user->student);
+        // error_log($user);
 
         if($user){
             if (!$user || !Hash::check($fields['password'], $user->password)) {
@@ -275,28 +275,31 @@ class UserController extends Controller
             }
 
         }
-        else if ($company){
-            if (!$company || !Hash::check($fields['password'], $company->password)) {
-                $response = [
-                    'errors' => [
-                        'message' => array('credentials-invalid')
-                    ]
-                ];
-            return response($response, 400);
-            }
-            // $company->tokens()->delete();
+        else {
+            $company = Company::where('email',$fields['email'])->first();
+            if ($company){
+                if (!$company || !Hash::check($fields['password'], $company->password)) {
+                    $response = [
+                        'errors' => [
+                            'message' => array('credentials-invalid')
+                        ]
+                    ];
+                return response($response, 400);
+                }
+                // $company->tokens()->delete();
 
-            if ($company->email_verified_at !== null) {
-                $token = $company->createToken('upTrainToken')->plainTextToken;
-                // error_log($token);
-                $response = [
-                    'company'=>$company,
-                    'token' => $token
-                ];
-            } else {
-                $response = [
-                    'company'=>$company
-                ];
+                if ($company->email_verified_at !== null) {
+                    $token = $company->createToken('upTrainToken')->plainTextToken;
+                    // error_log($token);
+                    $response = [
+                        'company'=>$company,
+                        'token' => $token
+                    ];
+                } else {
+                    $response = [
+                        'company'=>$company
+                    ];
+                }
             }
         }
         return response($response, 201);

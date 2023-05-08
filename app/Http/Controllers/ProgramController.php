@@ -14,7 +14,8 @@ class ProgramController extends Controller
     {
         $programs = Program::join('branches','branches.id','=','programs.branch_id')
         ->join('companies','companies.id','=','programs.company_id')
-        ->join('trainers','trainers.id','=','programs.trainer_id')->get();
+        ->join('trainers','trainers.id','=','programs.trainer_id')
+        ->join('users','users.id','=','trainers.user_id')->get();
         $response = $programs;
 
         return response($response, 201);

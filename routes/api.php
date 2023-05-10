@@ -48,7 +48,7 @@ Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
 Route::get('/getStudents', [StudentController::class, 'getStudents']);
-Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
+Route::get('/getPrograms/{id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);

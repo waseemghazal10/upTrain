@@ -21,9 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Auth\Events\Registered;
-
-
-
+use Illuminate\Database\DBAL\TimestampType;
 
 class UserController extends Controller
 {
@@ -39,7 +37,9 @@ class UserController extends Controller
             'password' => 'required|min:8|max:32|',
             'picture' => 'required',
             'skills' => 'required',
-            'field' => 'required'
+            'field_id' => 'required',
+            'location_id' => 'required',
+
         ], [
             'required' => 'field-required',
             'password.min' => 'password-length',
@@ -53,32 +53,21 @@ class UserController extends Controller
             'phone.regex' => 'phone-format',
             'phone.unique' => 'phone-exists'
         ]);
-        // foreach ($fields as $field){
-        //     error_log($field);
-        // }
+
         $user = User::create([
             'email' => $fields['email'],
             'first_name' => $fields['firstName'],
             'last_name' => $fields['lastName'],
             'password' => bcrypt($fields['password']),
+            'location_id' => $fields['location_id'],
+            'email_verified_at' => now(),
         ]);
 
         $student = new Student();
         $student->sPhone_number = $fields['phone'];
         $student->user_id = $user->id;
-        $student->field_id = $fields['field'];
+        $student->field_id = $fields['field_id'];
         $student->sPhoto = $fields['picture'];
-
-        // $image = $fields['picture'];
-        // $imageData = file_get_contents($image);
-
-        // error_log($imageData);
-        // $name = time() . '_' . $user->id . '.jpg';
-
-        // error_log($name);
-        // Storage::disk('studentProfile')->put($name, $imageData);
-        // $student->sPhoto = $name;
-
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -104,9 +93,9 @@ class UserController extends Controller
                 'user' => $user,
                 'student'=>$student
             ];
-            foreach ($response as $respons){
-                // error_log($respons);
-            }
+            // foreach ($response as $respons){
+            //     // error_log($respons);
+            // }
             return response()->json($response,201);
             // return response()->json($response, 201, ['Content-Type' => 'application/json', 'Charset' => 'UTF-8']);
         } catch (Exception $e) {
@@ -438,10 +427,6 @@ class UserController extends Controller
         return response($response, 201);
     }
 
-    public function loginUser(Request $request)
-    {
-        return view('logIn.loginUser');
-    }
 
 }
 

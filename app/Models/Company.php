@@ -15,9 +15,10 @@ class Company extends Model
         'cName',
         'cPassword',
         'cWebSite',
-        'cLocation',
+        'location_id',
         'cDescription',
         'cPhoto',
+        'cPhone_number',
         'verification_token'
     ];
 
@@ -42,8 +43,18 @@ class Company extends Model
         return $this->hasMany(Trainer::class);
     }
 
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
+
     public function program()
     {
         return $this->hasMany(Program::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }

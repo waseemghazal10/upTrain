@@ -28,6 +28,7 @@ class EmployeeController extends Controller
             'phone' => 'required|unique:employees,ePhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
+            'location_id' => 'required',
         ], [
             'required' => 'field-required',
             'password.min' => 'password-length',
@@ -47,6 +48,8 @@ class EmployeeController extends Controller
             'first_name' => $fields['first_name'],
             'last_name' => $fields['last_name'],
             'password' => bcrypt($fields['password']),
+            'location_id' => $fields['location_id'],
+            'email_verified_at' => now()
         ]);
 
         $employee = new Employee();
@@ -54,16 +57,6 @@ class EmployeeController extends Controller
         $employee->user_id = $user->id;
         $employee->eRole = 1;
         $employee->ePhoto = $fields['photo'];
-
-
-        // $image = $fields['photo'];
-        // $imageData = file_get_contents($image);
-
-        // $name = time() . '_' . $user->id . '.jpg';
-
-        // error_log($name);
-        // Storage::disk('employeeProfile')->put($name, $imageData);
-        // $employee->ePhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

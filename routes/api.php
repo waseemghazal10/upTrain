@@ -38,9 +38,15 @@ Route::get('/getProgramStudents/{id}', [StudentController::class, 'getProgramStu
 Route::get('/getTrainerStudents/{id}', [StudentController::class, 'getTrainerStudents']);
 Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStudents']);
 
+Route::get('/getCompanyTrainers/{id}', [TrainerController::class, 'getCompanyTrainers']);
+
+Route::get('/getTrainerPrograms/{id}', [ProgramController::class, 'getTrainerPrograms']);
+Route::get('/getCompanyPrograms/{id}', [ProgramController::class, 'getCompanyPrograms']);
+
+
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
-Route::get('/getbranches', [BranchController::class, 'getbranches']);
+Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
 Route::get('/getStudents', [StudentController::class, 'getStudents']);
 Route::get('/getPrograms', [ProgramController::class, 'getPrograms']);
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
@@ -48,7 +54,8 @@ Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
 Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
-
+Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);
+Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);

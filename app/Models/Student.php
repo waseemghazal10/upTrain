@@ -15,7 +15,8 @@ class Student extends Model
         'user_id',
         'trainer_id',
         'program_id',
-        'field_id'
+        'field_id',
+        'company_id'
     ];
 
 
@@ -48,6 +49,11 @@ class Student extends Model
     public function field()
     {
         return $this->belongsTo(Field::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
 

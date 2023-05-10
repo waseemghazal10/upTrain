@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->String('sPhone_number');
             $table->String('sPhoto')->default("");
-            $table->timestamps();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -30,6 +29,11 @@ return new class extends Migration
 
             $table->unsignedBigInteger('field_id')->nullable();;
             $table->foreign('field_id')->references('id')->on('fields')->onDelete('set null');
+
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
+
+            $table->timestamps();
         });
     }
 

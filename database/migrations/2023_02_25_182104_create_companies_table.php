@@ -19,12 +19,17 @@ return new class extends Migration
             $table->string('cEmail')->unique();
             $table->string('cPassword');
             $table->String('cPhoto')->default("");
-            $table->string('cDescription')->default("");
+            $table->String('cPhone_number')->default("");
+            $table->text('cDescription')->default("");
             $table->string('cWebSite');
-            $table->string('cLocation');
             $table->string('verification_token') -> default("");
             $table->rememberToken();
+
+            $table->unsignedBigInteger('location_id')->nullable();;
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('set null');
+
             $table->timestamps();
+
         });
     }
 

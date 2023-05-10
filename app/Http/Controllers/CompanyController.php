@@ -24,10 +24,11 @@ class CompanyController extends Controller
             'email' => 'required|unique:companies,cEmail|email',
             'name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'password' => 'required|min:8|max:32|',
+            'phone' => 'required',
             'photo' => 'required',
             'description' => 'required',
             'webSite' => 'required',
-            'location' => 'required'
+            'location_id' => 'required'
         ], [
             'required' => 'field-required',
             'password.min' => 'password-length',
@@ -44,19 +45,10 @@ class CompanyController extends Controller
             'cDescription' => $fields['description'],
             'cPassword' => bcrypt($fields['password']),
             'cWebSite' => $fields['webSite'],
-            'cLocation' => $fields['location'],
-            'cPhoto' => $fields['photo']
+            'location_id' => $fields['location_id'],
+            'cPhoto' => $fields['photo'],
+            'cPhone_number' => $fields['phone']
         ]);
-
-
-        // $image = $fields['photo'];
-        // $imageData = file_get_contents($image);
-
-        // $name = time() . '_' . $company->id . '.jpg';
-
-        // error_log($name);
-        // Storage::disk('companyProfile')->put($name, $imageData);
-        // $company->cPhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);

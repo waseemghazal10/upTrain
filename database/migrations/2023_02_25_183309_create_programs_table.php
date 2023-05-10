@@ -19,8 +19,7 @@ return new class extends Migration
             $table->date('pStart_date');
             $table->date('pEnd_date');
             $table->String('pPhoto')->default("");
-            $table->string('pDetails')->default("");
-            $table->timestamps();
+            $table->text('pDetails')->default("");
 
             $table->unsignedBigInteger('branch_id')->nullable();;
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
@@ -30,6 +29,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('trainer_id')->nullable();;
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
+
+            $table->timestamps();
         });
     }
 

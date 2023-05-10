@@ -17,14 +17,14 @@ return new class extends Migration
             $table->id();
             $table->integer('taStatus');
             $table->string('taTitle');
-            $table->string('taDescription')->default("");
+            $table->text('taDescription')->default("");
             $table->date('taStart_date');
             $table->date('taEnd_date');
-            $table->timestamps();
-
 
             $table->unsignedBigInteger('trainer_id')->nullable();
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
+
+            $table->timestamps();
         });
     }
 

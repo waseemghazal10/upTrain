@@ -9,6 +9,9 @@ class College extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'collageName',
+    ];
 
     public function field()
     {

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->string('bName');
-            $table->timestamps();
+
             $table->unsignedBigInteger('field_id')->nullable();;
             $table->foreign('field_id')->references('id')->on('fields')->onDelete('set null');
         });

@@ -15,7 +15,6 @@ class Program extends Model
         'pStart_date',
         'pEnd_date',
         'pPhoto',
-        'pDescription',
         'pDetails',
         'branch_id',
         'company_id',

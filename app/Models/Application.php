@@ -9,6 +9,16 @@ class Application extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'status',
+        'cv',
+        'details',
+        'program_id',
+        'student_id'
+    ];
+
+
     public function program()
     {
         return $this->belongsTo(Program::class);

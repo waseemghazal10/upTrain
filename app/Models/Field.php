@@ -9,6 +9,12 @@ class Field extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'fName',
+        'collage_id',
+        'employee_id'
+    ];
+
     public function student()
     {
         return $this->hasMany(Student::class);

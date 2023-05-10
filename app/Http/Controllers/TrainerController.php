@@ -30,7 +30,8 @@ class TrainerController extends Controller
             'phone' => 'required|unique:trainers,tPhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|',
             'photo' => 'required',
-            'company_id' => 'required'
+            'company_id' => 'required',
+            'location_id' => 'rquired'
         ], [
             'required' => 'field-required',
             'password.min' => 'password-length',
@@ -50,6 +51,8 @@ class TrainerController extends Controller
             'first_name' => $fields['firstName'],
             'last_name' => $fields['lastName'],
             'password' => bcrypt($fields['password']),
+            'location_id' => $fields['location_id'],
+            'email_verified_at' => now()
         ]);
 
         $trainer = new Trainer();
@@ -57,16 +60,6 @@ class TrainerController extends Controller
         $trainer->user_id = $user->id;
         $trainer->company_id = $fields['company_id'];
         $trainer->tPhoto = $fields['photo'];
-
-
-        // $image = $fields['photo'];
-        // $imageData = file_get_contents($image);
-
-        // $name = time() . '_' . $user->id . '.jpg';
-
-        // error_log($name);
-        // Storage::disk('trainerProfile')->put($name, $imageData);
-        // $trainer->tPhoto = $name;
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -81,4 +74,31 @@ class TrainerController extends Controller
 
         return response($response, 201);
     }
+
+    function getCompanyTrainers($id)
+    {
+        $trainers = Trainer::where('company_id',$id)->get();
+        $response = $trainers;
+
+        return response($response, 201);
+    }
+
+    function deleteTrainer($id)
+    {
+        $trainer = Trainer::find($id);
+
+        if ($trainer) {
+            $user = User::where('id', $trainer->user_id)->first();
+            if ($user) {
+                $user->delete();
+            }
+            $trainer->delete();
+            $response = 'The trainer and associated user(s) have been successfully deleted';
+            return response($response, 201);
+        } else {
+            $response = 'Could not find trainer with ID ' . $id;
+            return response($response, 400);
+        }
+    }
+
 }

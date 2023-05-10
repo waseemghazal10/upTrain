@@ -23,8 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'email_verified_at',
-
-
+        'location_id',
         'verification_token',
     ];
 
@@ -60,6 +59,11 @@ class User extends Authenticatable
 
     public function student()
     {
-        return $this->hasOne(Employee::class);
+        return $this->hasOne(Student::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }

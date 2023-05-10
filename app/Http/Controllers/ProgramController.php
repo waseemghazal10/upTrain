@@ -48,15 +48,6 @@ class ProgramController extends Controller
             'pPhoto' => $fields['photo']
         ]);
 
-        // $image = $fields['photo'];
-        // $imageData = file_get_contents($image);
-
-        // $name = time() . '_' . $program->id . '.jpg';
-
-        // error_log($name);
-        // Storage::disk('programProfile')->put($name, $imageData);
-        // $program->photo = $name;
-
         $program->save();
 
         $skills_id = explode(',',$fields['skills']);
@@ -67,5 +58,35 @@ class ProgramController extends Controller
         ];
 
         return response($response, 201);
+    }
+
+    function getTrainerPrograms($id)
+    {
+        $programs = Program::where('trainer_id',$id)->get();
+        $response = $programs;
+
+        return response($response, 201);
+    }
+
+    function getCompanyPrograms($id)
+    {
+        $programs = Program::where('company_id',$id)->get();
+        $response = $programs;
+
+        return response($response, 201);
+    }
+
+    function deleteProgram($id)
+    {
+        $program = Program::find($id);
+
+        if ($program) {
+            $program->delete();
+            $response = 'The program have been successfully deleted';
+            return response($response, 201);
+        } else {
+            $response = 'Could not find program with ID ' . $id;
+            return response($response, 400);
+        }
     }
 }

@@ -9,6 +9,17 @@ class Task extends Model
 {
     use HasFactory;
 
+
+    protected $fillable = [
+        'taStatus',
+        'taTitle',
+        'taDescription',
+        'taStart_date',
+        'taEnd_date',
+        'trainer_id'
+    ];
+
+
     public function student()
     {
         return $this->belongsToMany(Student::class);

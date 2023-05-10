@@ -9,6 +9,11 @@ class Branch extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'bName',
+        'field_id'
+    ];
+
     public function field()
     {
         return $this->belongsTo(Field::class);

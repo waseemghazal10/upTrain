@@ -27,58 +27,33 @@ class StudentController extends Controller
         return response($response, 201);
     }
 
-    // function getCompanyStudents($id)
-    // {
-    //     // $programs = Program::where('company_id', $id)->get();
+    function getCompanyStudents($id)
+    {
+        $students = Student::where('company_id',$id)->join('users','users.id','=','students.user_id')->get();
+        $response =  $students;
 
-    //     // foreach ($programs as $program) {
+        return response($response, 201);
+    }
 
-    //     //     $students = Student::where('program_id',$program->id)->join('users','users.id','=','students.user_id')->get();
-    //     // }
-    //     // $response =  $students;
-    //     // return response($response, 201);
-
-    //     $students = [];
-    //     $programs = Program::where('company_id', $id)->get();
-
-    //     foreach ($programs as $program) {
-    //         $programStudents = Student::where('program_id', $program->id)
-    //             ->join('users', 'users.id', '=', 'students.user_id')
-    //             ->get();
-    //         $students = array_merge($students, $programStudents);
-    //     }
-
-    //     $response = $students;
-    //     return response($response, 201);
-    // }
-
-    // function getCompanyStudents($id)
-    // {
-    //     $students = [];
-
-    //     $programs = Program::where('company_id', $id)->get();
-
-    //     foreach ($programs as $program) {
-    //         $programStudents = Student::where('program_id', $program->id)
-    //             ->join('users', 'users.id', '=', 'students.user_id')
-    //             ->get();
-
-    //         if (is_array($programStudents)) {
-    //             $students = array_merge($students, $programStudents);
-    //         }
-    //     }
-
-    //     $response = $students;
-    //     return response($response, 201);
-    // }
 
     function deleteStudent($id)
     {
         $student = Student::find($id);
-        $student->delete();
-        $response = 'The student successfully deleted';
 
-        return response($response, 201);
+        if ($student) {
+            $user = User::where('id', $student->user_id)->first();
+            if ($user) {
+                $user->delete();
+            }
+            $student->delete();
+            $response = 'The student and associated user(s) have been successfully deleted';
+            return response($response, 201);
+        } else {
+            $response = 'Could not find student with ID ' . $id;
+            return response($response, 400);
+        }
     }
+
+
 
 }

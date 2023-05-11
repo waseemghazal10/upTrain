@@ -40,15 +40,20 @@ Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStu
 
 Route::get('/getCompanyTrainers/{id}', [TrainerController::class, 'getCompanyTrainers']);
 
-Route::get('/getTrainerPrograms/{id}', [ProgramController::class, 'getTrainerPrograms']);
-Route::get('/getCompanyPrograms/{id}', [ProgramController::class, 'getCompanyPrograms']);
+Route::get('/getTrainerPrograms/{name}', [ProgramController::class, 'getTrainerPrograms']);
+Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
 
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
 Route::get('/getStudents', [StudentController::class, 'getStudents']);
+
 Route::get('/getPrograms/{id}', [ProgramController::class, 'getPrograms']);
+Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);
+Route::get('/getProgramTrainer/{name}', [TrainerController::class, 'getProgramTrainer']);
+
+
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);

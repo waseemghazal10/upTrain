@@ -16,7 +16,14 @@ class CompanyController extends Controller
 
         return response($response, 201);
     }
+    
+    function getProgramCompany($companyName)
+    {
+        $company = Company::where('cName', $companyName)->get();
+        $response = $company;
 
+        return response($response, 201);
+    }
 
     function addCompany(Request $request)
     {

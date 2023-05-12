@@ -57,14 +57,18 @@ Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStude
 Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);
 Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);
 
+
+Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
+
+Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);
 
-    Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
 
     Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
 
-    Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
+
 
     Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
 });

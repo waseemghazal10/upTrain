@@ -207,6 +207,11 @@ class UserController extends Controller
             $user->tokens()->delete();
 
             $student = Student::where ('user_id',$user->id)->first();
+            // $studentWithSkills = $student->load('skill');
+            // $student = Student::where ('user_id',$user->id)
+            // ->with('skill')->join()
+            // ->get();
+
             $trainer = Trainer::where ('user_id',$user->id)->first();
             $employee = Employee::where ('user_id',$user->id)->first();
 
@@ -214,18 +219,22 @@ class UserController extends Controller
 
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    // error_log($token);
+                    $skills = skill::all();
+                    $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
+                    ->select('skills.skName')->get();
+
                     $response = [
                         'user' => $user,
                         'student'=>$student,
+                        'skilld'=>$skillsStudent,
                         'token' => $token
                     ];
                 } else {
-                    $response = [
-                        'user' => $user,
-                        'student'=>$student
-                    ];
-                }
+                        $response = [
+                            'user' => $user,
+                            'student'=>$student
+                        ];
+                    }
             }
             else if ($trainer){
 
@@ -243,7 +252,6 @@ class UserController extends Controller
                         'trainer'=>$trainer
                     ];
                 }
-
             }
             else if ($employee){
 

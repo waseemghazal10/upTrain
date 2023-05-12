@@ -225,14 +225,14 @@ class UserController extends Controller
                     $response = [
                         'user' => $user,
                         'student'=>$student,
-                        'skilld'=>$skillsStudent,
+                        'skills'=>$skillsStudent,
                         'token' => $token
                     ];
                 } else {
                         $response = [
                             'user' => $user,
                             'student'=>$student,
-                            'skilld'=>$skillsStudent
+                            'skills'=>$skillsStudent
                         ];
                     }
             }

@@ -216,12 +216,11 @@ class UserController extends Controller
             $employee = Employee::where ('user_id',$user->id)->first();
 
             if ($student){
-
-                if ($user->email_verified_at !== null) {
-                    $token = $user->createToken('upTrainToken')->plainTextToken;
-                    $skills = skill::all();
+                $skills = skill::all();
                     $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
                     ->select('skills.skName')->get();
+                if ($user->email_verified_at !== null) {
+                    $token = $user->createToken('upTrainToken')->plainTextToken;
 
                     $response = [
                         'user' => $user,
@@ -232,7 +231,8 @@ class UserController extends Controller
                 } else {
                         $response = [
                             'user' => $user,
-                            'student'=>$student
+                            'student'=>$student,
+                            'skilld'=>$skillsStudent
                         ];
                     }
             }

@@ -14,7 +14,7 @@ class TrainerController extends Controller
     //
     function getTrainers(Request $request)
     {
-        $trainers = Trainer::join('users','users.id','=','trainers.user_id')->get();
+        $trainers = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->get();
         $response = $trainers;
 
         return response($response, 201);
@@ -75,9 +75,18 @@ class TrainerController extends Controller
         return response($response, 201);
     }
 
+    function getProgramTrainer($trainerName)
+    {
+        $trainer = Trainer::where('first_name', $trainerName)->join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')->get();
+
+        $response = $trainer;
+
+        return response($response, 201);
+    }
+
     function getCompanyTrainers($id)
     {
-        $trainers = Trainer::where('company_id',$id)->get();
+        $trainers = Trainer::where('company_id', $id)->get();
         $response = $trainers;
 
         return response($response, 201);
@@ -100,5 +109,4 @@ class TrainerController extends Controller
             return response($response, 400);
         }
     }
-
 }

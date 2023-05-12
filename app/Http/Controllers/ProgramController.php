@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Program;
+use App\Models\Company;
 use App\Models\skillsPrograms;
+use App\Models\Trainer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,6 +24,7 @@ class ProgramController extends Controller
 
         return response($response, 201);
     }
+
 
     function addProgram(Request $request)
     {
@@ -61,17 +65,28 @@ class ProgramController extends Controller
         return response($response, 201);
     }
 
-    function getTrainerPrograms($id)
+    function getTrainerPrograms($name)
     {
-        $programs = Program::where('trainer_id', $id)->get();
+        $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('first_name', $name)->first();
+
+        $programs = Program::where('programs.trainer_id',$trainer->id)->get();
+
+
         $response = $programs;
 
         return response($response, 201);
-    }
+    } //doesn't work yet!!!!!
 
-    function getCompanyPrograms($id)
+    function getCompanyPrograms($name)
     {
-        $programs = Program::where('company_id', $id)->get();
+
+        $company = Company::where('cName', $name)->first();
+        $programs = Program::where('programs.company_id', $company->id)
+            ->join('branches', 'branches.id', '=', 'programs.branch_id')
+            ->join('companies', 'companies.id', '=', 'programs.company_id')
+            ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
+            ->join('users', 'users.id', '=', 'trainers.user_id')->get();
+
         $response = $programs;
 
         return response($response, 201);

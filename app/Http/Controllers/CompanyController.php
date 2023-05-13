@@ -6,6 +6,8 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+use function Ramsey\Uuid\v1;
+
 class CompanyController extends Controller
 {
     //
@@ -16,7 +18,7 @@ class CompanyController extends Controller
 
         return response($response, 201);
     }
-    
+
     function getProgramCompany($companyName)
     {
         $company = Company::where('cName', $companyName)->get();
@@ -68,4 +70,39 @@ class CompanyController extends Controller
 
         return response($response, 201);
     }
+
+    function updateCompany(Request $request)
+    {
+
+        $fields = $request->validate([
+            'id' =>'required',
+            'email' => 'required|email',
+            'name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'phone' => 'required',
+            'photo' => 'required',
+            'description' => 'required',
+            'webSite' => 'required',
+            'location_id' => 'required'
+        ], [
+            'required' => 'field-required',
+            'email.email' => 'email-format',
+            'name.regex' => 'name-format'
+        ]);
+
+        $company = Company::find($fields['id']);
+        $company->cPhone_number = $fields['phone'];
+        $company->cPhoto = $fields['photo'];
+        $company->location_id = $fields['location_id'];
+        $company->cName = $fields['name'];
+        $company->cEmail = $fields['email'];
+        $company->cDescription = $fields['description'];
+        $company->cWebSite = $fields['webSite'];
+        $company->save();
+
+        $response = [
+            'company'=>$company
+        ];
+        return response($response,201);
+    }
+
 }

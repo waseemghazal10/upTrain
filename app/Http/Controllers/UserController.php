@@ -35,7 +35,7 @@ class UserController extends Controller
             'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'phone' => 'required|unique:students,sPhone_number|size:10|regex:/^05\d{8}$/',
             'password' => 'required|min:8|max:32|',
-            'picture' => 'required',
+            'photo' => 'required',
             'skills' => 'required',
             'field_id' => 'required',
             'location_id' => 'required',
@@ -67,7 +67,7 @@ class UserController extends Controller
         $student->sPhone_number = $fields['phone'];
         $student->user_id = $user->id;
         $student->field_id = $fields['field_id'];
-        $student->sPhoto = $fields['picture'];
+        $student->sPhoto = $fields['photo'];
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -216,9 +216,8 @@ class UserController extends Controller
             $employee = Employee::where ('user_id',$user->id)->first();
 
             if ($student){
-                $skills = skill::all();
-                    $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
-                    ->select('skills.skName')->get();
+                $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
+                ->select('skills.skName')->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
 

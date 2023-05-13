@@ -109,4 +109,50 @@ class TrainerController extends Controller
             return response($response, 400);
         }
     }
+
+
+    function updateTrainer(Request $request)
+    {
+
+        $fields = $request->validate([
+            'id' => 'required',
+            'email' => 'required|email',
+            'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'phone' => 'required|size:10|regex:/^05\d{8}$/',
+            'photo' => 'required',
+            'company_id' => 'required',
+            'location_id' => 'rquired'
+        ], [
+            'required' => 'field-required',
+            'password.min' => 'password-length',
+            'password.max' => 'password-length',
+            'password.regex' => 'password-format',
+            'email.email' => 'email-format',
+            'firstName.regex' => 'name-format',
+            'lastName.regex' => 'name-format',
+            'phone.size' => 'phone-format',
+            'phone.regex' => 'phone-format',
+        ]);
+
+        $trainer = Trainer::find($fields['id']);
+        $trainer->tPhone_number = $fields['phone'];
+        $trainer->tPhoto = $fields['photo'];
+        $trainer->company_id = $fields['company_id'];
+        $trainer->save();
+
+        $user = User:: find($trainer->user_id);
+        $user->email = $fields['email'];
+        $user->first_name = $fields['firstName'];
+        $user->last_name = $fields['lastName'];
+        $user->location_id = $fields['location_id'];
+
+        $user->save();
+
+        $response = [
+            'user' => $user,
+            'trainer'=>$trainer
+        ];
+        return response($response,201);
+    }
 }

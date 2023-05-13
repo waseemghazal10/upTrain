@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Program;
+use App\Models\Skill;
+use App\Models\skillsStudents;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Models\Student;
@@ -52,6 +54,57 @@ class StudentController extends Controller
             $response = 'Could not find student with ID ' . $id;
             return response($response, 400);
         }
+    }
+
+
+    function updateStudent(Request $request)
+    {
+
+        $fields = $request->validate([
+            'id' => 'required',
+            'email' => 'required|email',
+            'firstName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'lastName' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'phone' => 'required|size:10|regex:/^05\d{8}$/',
+            'photo' => 'required',
+            'skills' => 'required',
+            'location_id' => 'required',
+
+        ], [
+            'required' => 'field-required',
+            'email.email' => 'email-format',
+            'firstName.regex' => 'name-format',
+            'lastName.regex' => 'name-format',
+            'phone.size' => 'phone-format',
+            'phone.regex' => 'phone-format',
+        ]);
+
+        $student = Student::find($fields['id']);
+        $student->skill()->detach();
+        $student->sPhone_number = $fields['phone'];
+        $student->sPhoto = $fields['photo'];
+        $student->save();
+
+        $user = User:: find($student->user_id);
+        $user->email = $fields['email'];
+        $user->first_name = $fields['firstName'];
+        $user->last_name = $fields['lastName'];
+        $user->location_id = $fields['location_id'];
+
+        $user->save();
+
+        $skills_id = explode(',',$fields['skills']);
+        $student->skill()->attach($skills_id);
+
+        $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
+        ->select('skills.skName')->get();
+
+        $response = [
+            'user' => $user,
+            'student'=>$student,
+            'skills'=>$skillsStudent,
+        ];
+        return response($response,201);
     }
 
 

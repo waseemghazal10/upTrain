@@ -30,9 +30,9 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/verify', [UserController::class, 'verify']);
 Route::post('/resendCode', [UserController::class, 'resendCode']);
-Route::post('/requestResetPassword', [UserController::class, 'requestReset']);
-Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);
-Route::post('/resetPassword', [UserController::class, 'resetPassword']);
+Route::post('/requestResetPassword', [UserController::class, 'requestReset']);//inside
+Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);//inside
+Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
 
 Route::get('/getProgramStudents/{id}', [StudentController::class, 'getProgramStudents']);
 Route::get('/getTrainerStudents/{id}', [StudentController::class, 'getTrainerStudents']);
@@ -58,14 +58,20 @@ Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
-Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);
-Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);
-Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);
+Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);//inside
+Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);//inside
+Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);//inside
 
 
-Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
+Route::post('/updateStudent', [StudentController::class, 'updateStudent']);//inside
+Route::post('/updateTrainer', [TrainerController::class, 'updateTrainer']);//inside
+Route::post('/updateEmployee', [EmployeeController::class, 'updateEmployee']);//inside
+Route::post('/updateCompany', [CompanyController::class, 'updateCompany']);//inside
+Route::post('/updateProgram', [ProgramController::class, 'updateProgram']);//inside
 
-Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
+Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);//inside
+
+Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);//inside
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [UserController::class, 'logout']);

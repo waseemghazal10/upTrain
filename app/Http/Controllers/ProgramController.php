@@ -105,4 +105,39 @@ class ProgramController extends Controller
             return response($response, 400);
         }
     }
+
+    function updateProgram(Request $request)
+    {
+
+        $fields = $request->validate([
+            'id' =>'required',
+            'title' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'photo' => 'required',
+            'details' => 'required',
+            'branch_id' => 'required',
+            'trainer_id' => 'required',
+            'skills' => 'required'
+        ], [
+            'required' => 'field-required'
+        ]);
+
+        $program = Program::find($fields['id']);
+
+        $program->pTitle = $fields['title'];
+        $program->pStart_date = $fields['start_date'];
+        $program->pEnd_date = $fields['end_date'];
+        $program->pDetails = $fields['details'];
+        $program->branch_id = $fields['branch_id'];
+        $program->trainer_id = $fields['trainer_id'];
+        $program->pPhoto = $fields['photo'];
+
+        $program->save();
+
+        $response = [
+            'program'=>$program
+        ];
+        return response($response,201);
+    }
 }

@@ -71,4 +71,44 @@ class EmployeeController extends Controller
 
         return response($response, 201);
     }
+
+    function updateEmployee(Request $request)
+    {
+
+        $fields = $request->validate([
+            'id' => 'required',
+            'email' => 'required|email',
+            'first_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'last_name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
+            'phone' => 'required|size:10|regex:/^05\d{8}$/',
+            'photo' => 'required',
+            'location_id' => 'required',
+        ], [
+            'required' => 'field-required',
+            'email.email' => 'email-format',
+            'first_name.regex' => 'name-format',
+            'last_name.regex' => 'name-format',
+            'phone.size' => 'phone-format',
+            'phone.regex' => 'phone-format',
+        ]);
+
+        $employee = Employee::find($fields['id']);
+        $employee->ePhone_number = $fields['phone'];
+        $employee->ePhoto = $fields['photo'];
+        $employee->save();
+
+        $user = User:: find($employee->user_id);
+        $user->email = $fields['email'];
+        $user->first_name = $fields['firstName'];
+        $user->last_name = $fields['lastName'];
+        $user->location_id = $fields['location_id'];
+
+        $user->save();
+
+        $response = [
+            'user' => $user,
+            'employee'=>$employee
+        ];
+        return response($response,201);
+    }
 }

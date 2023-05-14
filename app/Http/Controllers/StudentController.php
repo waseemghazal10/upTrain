@@ -96,8 +96,7 @@ class StudentController extends Controller
         $skills_id = explode(',',$fields['skills']);
         $student->skill()->attach($skills_id);
 
-        $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
-        ->select('skills.skName')->get();
+        $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')->get();
 
         $response = [
             'user' => $user,

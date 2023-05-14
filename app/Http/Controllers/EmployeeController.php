@@ -92,18 +92,18 @@ class EmployeeController extends Controller
             'phone.regex' => 'phone-format',
         ]);
 
-        $employee = Employee::find($fields['id']);
-        $employee->ePhone_number = $fields['phone'];
-        $employee->ePhoto = $fields['photo'];
-        $employee->save();
-
-        $user = User:: find($employee->user_id);
+        $user = User:: where('email',$fields['email'])->first();
         $user->email = $fields['email'];
         $user->first_name = $fields['firstName'];
         $user->last_name = $fields['lastName'];
         $user->location_id = $fields['location_id'];
 
         $user->save();
+
+        $employee = Employee::where ('user_id',$user->id)->first();
+        $employee->ePhone_number = $fields['phone'];
+        $employee->ePhoto = $fields['photo'];
+        $employee->save();
 
         $response = [
             'user' => $user,

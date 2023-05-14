@@ -135,19 +135,19 @@ class TrainerController extends Controller
             'phone.regex' => 'phone-format',
         ]);
 
-        $trainer = Trainer::find($fields['id']);
-        $trainer->tPhone_number = $fields['phone'];
-        $trainer->tPhoto = $fields['photo'];
-        $trainer->company_id = $fields['company_id'];
-        $trainer->save();
-
-        $user = User:: find($trainer->user_id);
+        $user = User:: where('email',$fields['email'])->first();
         $user->email = $fields['email'];
         $user->first_name = $fields['firstName'];
         $user->last_name = $fields['lastName'];
         $user->location_id = $fields['location_id'];
 
         $user->save();
+
+        $trainer = Trainer::where ('user_id',$user->id)->first();
+        $trainer->tPhone_number = $fields['phone'];
+        $trainer->tPhoto = $fields['photo'];
+        $trainer->company_id = $fields['company_id'];
+        $trainer->save();
 
         $response = [
             'user' => $user,

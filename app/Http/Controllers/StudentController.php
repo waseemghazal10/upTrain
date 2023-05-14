@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Models\Student;
 use App\Models\User;
+use Error;
 
 class StudentController extends Controller
 {
@@ -79,19 +80,19 @@ class StudentController extends Controller
             'phone.regex' => 'phone-format',
         ]);
 
-        $student = Student::find($fields['id']);
+        $user = User:: where('email',$fields['email'])->first();
+        $user->email = $fields['email'];
+        $user->first_name = $fields['firstName'];
+        $user->last_name = $fields['lastName'];
+        $user->location_id = $fields['location_id'];
+        $user->save();
+
+        $student = Student::where ('user_id',$user->id)->first();
         $student->skill()->detach();
         $student->sPhone_number = $fields['phone'];
         $student->sPhoto = $fields['photo'];
         $student->save();
 
-        $user = User:: find($student->user_id);
-        $user->email = $fields['email'];
-        $user->first_name = $fields['firstName'];
-        $user->last_name = $fields['lastName'];
-        $user->location_id = $fields['location_id'];
-
-        $user->save();
 
         $skills_id = explode(',',$fields['skills']);
         $student->skill()->attach($skills_id);

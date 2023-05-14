@@ -191,7 +191,7 @@ class UserController extends Controller
             ]
         );
 
-        $user = User::where('email', $fields['email'])->join('locations','locations.id','users.location_id')->first();
+        $user = User::where('email', $fields['email'])->first();
         // error_log($user);
 
         if($user){
@@ -207,8 +207,9 @@ class UserController extends Controller
             $user->tokens()->delete();
 
             $student = Student::where('user_id', $user->id)->join('fields','fields.id','students.field_id')->first();
-
+            // error_log($student);
             $trainer = Trainer::where ('user_id',$user->id)->first();
+            // error_log($trainer);
             $employee = Employee::where ('user_id',$user->id)->first();
 
             if ($student){
@@ -216,9 +217,9 @@ class UserController extends Controller
                 ->select('skills.skName')->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-
+                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     $response = [
-                        'user' => $user,
+                        'user' => $userWithLocation,
                         'student'=>$student,
                         'skills'=>$skillsStudent,
                         'token' => $token
@@ -235,9 +236,10 @@ class UserController extends Controller
 
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
+                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     // error_log($token);
                     $response = [
-                        'user' => $user,
+                        'user' => $userWithLocation,
                         'trainer'=>$trainer,
                         'token' => $token
                     ];
@@ -252,9 +254,9 @@ class UserController extends Controller
 
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    // error_log($token);
+                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     $response = [
-                        'user' => $user,
+                        'user' => $userWithLocation,
                         'employee'=>$employee,
                         'token' => $token
                     ];

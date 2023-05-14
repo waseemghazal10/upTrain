@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FieldsController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SkillsController;
 use App\Http\Controllers\StudentController;
@@ -48,6 +49,8 @@ Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
 Route::get('/getStudents', [StudentController::class, 'getStudents']);
+Route::get('/getLocations', [LocationController::class, 'getLocations']);
+
 
 Route::get('/getPrograms/{id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);

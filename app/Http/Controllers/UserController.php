@@ -191,7 +191,7 @@ class UserController extends Controller
             ]
         );
 
-        $user = User::where('email', $fields['email'])->first();
+        $user = User::where('email', $fields['email'])->join('locations','locations.id','users.location_id')->first();
         // error_log($user);
 
         if($user){
@@ -206,11 +206,7 @@ class UserController extends Controller
 
             $user->tokens()->delete();
 
-            $student = Student::where ('user_id',$user->id)->first();
-            // $studentWithSkills = $student->load('skill');
-            // $student = Student::where ('user_id',$user->id)
-            // ->with('skill')->join()
-            // ->get();
+            $student = Student::where('user_id', $user->id)->join('fields','fields.id','students.field_id')->first();
 
             $trainer = Trainer::where ('user_id',$user->id)->first();
             $employee = Employee::where ('user_id',$user->id)->first();

@@ -15,7 +15,7 @@ class StudentController extends Controller
 {
     function getStudents(Request $request)
     {
-        $students = Student::join('users','users.id','=','students.user_id')->get();
+        $students = Student::join('users','users.id','=','students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields','fields.id','students.field_id')->get();
         $response =  $students;
 
         return response($response, 201);

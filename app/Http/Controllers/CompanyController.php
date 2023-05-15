@@ -13,7 +13,7 @@ class CompanyController extends Controller
     //
     function getCompanies(Request $request)
     {
-        $companies = Company::all();
+        $companies = Company::join('locations', 'locations.id', '=', 'companies.location_id')->get();
         $response = $companies;
 
         return response($response, 201);
@@ -75,7 +75,7 @@ class CompanyController extends Controller
     {
 
         $fields = $request->validate([
-            'id' =>'required',
+            'id' => 'required',
             'email' => 'required|email',
             'name' => 'required|regex:/^[\x{0621}-\x{064a} A-Za-z]+$/u',
             'phone' => 'required',
@@ -100,9 +100,8 @@ class CompanyController extends Controller
         $company->save();
 
         $response = [
-            'company'=>$company
+            'company' => $company
         ];
-        return response($response,201);
+        return response($response, 201);
     }
-
 }

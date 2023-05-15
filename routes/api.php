@@ -59,6 +59,7 @@ Route::get('/getProgramTrainer/{name}', [TrainerController::class, 'getProgramTr
 
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
+Route::get('/getAdmin', [EmployeeController::class, 'getAdmin']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
 Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);//inside

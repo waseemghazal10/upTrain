@@ -214,7 +214,7 @@ class UserController extends Controller
 
             if ($student){
                 $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
-                ->select('skills.skName')->get();
+                ->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
                     $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();

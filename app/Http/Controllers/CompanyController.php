@@ -18,7 +18,13 @@ class CompanyController extends Controller
 
         return response($response, 201);
     }
+    function deleteCompany($companyName)
+    {
+        $company = Company::where('cName', $companyName)->delete();
 
+        $response = 'deleted successfully';
+        return response($response, 201);
+    }
     function getProgramCompany($companyName)
     {
         $company = Company::where('cName', $companyName)->get();

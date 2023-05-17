@@ -15,6 +15,7 @@ class Employee extends Model
         'ePhoto',
         'eRole',
         'user_id',
+        'field_id',
         'verification_token'
     ];
 
@@ -40,6 +41,6 @@ class Employee extends Model
 
     public function field()
     {
-        return $this->hasMany(Field::class);
+        return $this->belongsTo(Field::class);
     }
 }

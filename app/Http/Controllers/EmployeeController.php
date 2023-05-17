@@ -12,15 +12,18 @@ class EmployeeController extends Controller
     //
 
     function getAdmin(){
-        $admin = Employee::where('eRole',1)->join('users','users.id','=','employees.user_id')->get();
+        $admin = Employee::where('eRole',1)->join('users','users.id','=','employees.user_id')
+        ->join('locations','locations.id','=','users.location_id')->get();
         $response = $admin;
 
         return response($response, 201);
     }
-    
+
     function getEmployees(Request $request)
     {
-        $employees = Employee::where('eRole',0)->join('users','users.id','=','employees.user_id')->get();
+        $employees = Employee::where('eRole',0)->join('users','users.id','=','employees.user_id')
+        ->join('locations','locations.id','=','users.location_id')
+        ->join('fields','fields.id','=','employees.field_id')->get();
         $response = $employees;
 
         return response($response, 201);

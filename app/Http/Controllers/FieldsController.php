@@ -11,7 +11,7 @@ class FieldsController extends Controller
 
 
 
-    function getFields(Request $request)
+    function getFields()
     {
         $fields = Field::where('fields.id', '!=', '17')->join('colleges','colleges.id','fields.college_id')->get();
 

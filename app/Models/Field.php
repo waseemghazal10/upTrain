@@ -30,6 +30,13 @@ class Field extends Model
         return $this->hasMany(Branch::class);
     }
 
+
+    public function company()
+    {
+        return $this->hasMany(company::class);
+    }
+
+
     public function employee()
     {
         return $this->belongsTo(Employee::class);

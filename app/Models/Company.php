@@ -16,6 +16,7 @@ class Company extends Model
         'cPassword',
         'cWebSite',
         'location_id',
+        'field_id',
         'cDescription',
         'cPhoto',
         'cPhone_number',
@@ -56,5 +57,10 @@ class Company extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function field()
+    {
+        return $this->belongsTo(Field::class);
     }
 }

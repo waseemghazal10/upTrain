@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('fName');
 
-            $table->unsignedBigInteger('college_id')->nullable();;
+            $table->unsignedBigInteger('college_id')->nullable();
             $table->foreign('college_id')->references('id')->on('colleges')->onDelete('set null');
 
             $table->unsignedBigInteger('employee_id')->nullable();

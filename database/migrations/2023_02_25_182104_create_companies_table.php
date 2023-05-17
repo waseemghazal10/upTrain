@@ -25,8 +25,11 @@ return new class extends Migration
             $table->string('verification_token') -> default("");
             $table->rememberToken();
 
-            $table->unsignedBigInteger('location_id')->nullable();;
+            $table->unsignedBigInteger('location_id')->nullable();
             $table->foreign('location_id')->references('id')->on('locations')->onDelete('set null');
+
+            $table->unsignedBigInteger('field_id')->nullable();
+            $table->foreign('field_id')->references('id')->on('fields')->onDelete('set null');
 
             $table->timestamps();
 

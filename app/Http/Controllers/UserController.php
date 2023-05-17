@@ -93,11 +93,7 @@ class UserController extends Controller
                 'user' => $user,
                 'student'=>$student
             ];
-            // foreach ($response as $respons){
-            //     // error_log($respons);
-            // }
             return response()->json($response,201);
-            // return response()->json($response, 201, ['Content-Type' => 'application/json', 'Charset' => 'UTF-8']);
         } catch (Exception $e) {
             return response([], 400);
         }
@@ -233,10 +229,9 @@ class UserController extends Controller
                     }
             }
             else if ($trainer){
-
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     // error_log($token);
                     $response = [
                         'user' => $userWithLocation,
@@ -245,16 +240,15 @@ class UserController extends Controller
                     ];
                 } else {
                     $response = [
-                        'user' => $user,
+                        'user' => $userWithLocation,
                         'trainer'=>$trainer
                     ];
                 }
             }
             else if ($employee){
-
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     $response = [
                         'user' => $userWithLocation,
                         'employee'=>$employee,
@@ -262,7 +256,7 @@ class UserController extends Controller
                     ];
                 } else {
                     $response = [
-                        'user' => $user,
+                        'user' => $userWithLocation,
                         'employee'=>$employee
                     ];
                 }

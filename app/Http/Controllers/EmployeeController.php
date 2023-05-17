@@ -19,7 +19,7 @@ class EmployeeController extends Controller
         return response($response, 201);
     }
 
-    function getEmployees(Request $request)
+    function getEmployees()
     {
         $employees = Employee::where('eRole',0)->join('users','users.id','=','employees.user_id')
         ->join('locations','locations.id','=','users.location_id')

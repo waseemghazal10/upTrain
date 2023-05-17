@@ -28,6 +28,14 @@ class EmployeeController extends Controller
 
         return response($response, 201);
     }
+    function deleteEmployee($email)
+    {
+        $employee = Employee::join('users','users.id','=','employees.user_id')->where('email',$email)->delete();
+        $response = 'Employee deleted';
+
+        return response($response, 201);
+    }
+
 
 
     function addEmployee(Request $request)

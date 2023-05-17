@@ -66,6 +66,7 @@ Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStude
 Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);//inside
 Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);//inside
 Route::delete('/admin/deleteCompany/{name}', [CompanyController::class, 'deleteCompany']);//inside
+Route::delete('/admin/deleteEmployee/{email}', [EmployeeController::class, 'deleteEmployee']);//inside
 
 
 Route::post('/updateStudent', [StudentController::class, 'updateStudent']);//inside

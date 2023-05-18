@@ -7,13 +7,10 @@ use App\Models\Field;
 
 class FieldsController extends Controller
 {
-    //
-
-
 
     function getFields()
     {
-        $fields = Field::where('fields.id', '!=', '17')->join('colleges', 'colleges.id', 'fields.college_id')->get();
+        $fields = Field::where('fields.id', '!=', '17')->join('colleges', 'colleges.id', 'fields.college_id')->select('fields.*','colleges.collegeName')->get();
         $response =  $fields;
 
         return response($response, 201);

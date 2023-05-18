@@ -48,6 +48,7 @@ class EmployeeController extends Controller
             'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/',
             'photo' => 'required',
             'location_id' => 'required',
+            'field_id' => 'required',
         ], [
             'required' => 'field-required',
             'password.min' => 'password-length',
@@ -76,6 +77,7 @@ class EmployeeController extends Controller
         $employee->user_id = $user->id;
         $employee->eRole = 1;
         $employee->ePhoto = $fields['photo'];
+        $employee->field_id = $fields['field_id'];
 
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -102,6 +104,7 @@ class EmployeeController extends Controller
             'phone' => 'required|size:10|regex:/^05\d{8}$/',
             'photo' => 'required',
             'location_id' => 'required',
+            'field_id' => 'required',
         ], [
             'required' => 'field-required',
             'email.email' => 'email-format',
@@ -122,6 +125,8 @@ class EmployeeController extends Controller
         $employee = Employee::where ('user_id',$user->id)->first();
         $employee->ePhone_number = $fields['phone'];
         $employee->ePhoto = $fields['photo'];
+        $employee->field_id = $fields['field_id'];
+
         $employee->save();
 
         $response = [

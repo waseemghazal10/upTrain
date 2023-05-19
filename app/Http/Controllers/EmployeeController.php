@@ -13,6 +13,7 @@ class EmployeeController extends Controller
 
     function getAdmin(){
         $admin = Employee::where('eRole',1)->join('users','users.id','=','employees.user_id')
+        ->join('fields','fields.id','=','employees.field_id')
         ->join('locations','locations.id','=','users.location_id')->get();
         $response = $admin;
 

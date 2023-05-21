@@ -41,4 +41,9 @@ class Field extends Model
     {
         return $this->hasMany(Employee::class);
     }
+
+    public function program()
+    {
+        return $this->hasMany(Program::class);
+    }
 }

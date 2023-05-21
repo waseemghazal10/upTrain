@@ -18,7 +18,8 @@ class Program extends Model
         'pDetails',
         'branch_id',
         'company_id',
-        'trainer_id'
+        'trainer_id',
+        'field_id'
     ];
 
     public function getPhotoAttribute()
@@ -60,5 +61,10 @@ class Program extends Model
     public function trainer()
     {
         return $this->belongsTo(Trainer::class);
+    }
+
+    public function field()
+    {
+        return $this->belongsTo(Field::class);
     }
 }

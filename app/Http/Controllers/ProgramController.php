@@ -37,6 +37,7 @@ class ProgramController extends Controller
             'branch_id' => 'required',
             'company_id' => 'required',
             'trainer_id' => 'required',
+            'field_id'=>'required',
             'skills' => 'required'
         ], [
             'required' => 'field-required'
@@ -50,6 +51,7 @@ class ProgramController extends Controller
             'branch_id' => $fields['branch_id'],
             'company_id' => $fields['company_id'],
             'trainer_id' => $fields['trainer_id'],
+            'field_id' => $fields['field_id'],
             'pPhoto' => $fields['photo']
         ]);
 
@@ -118,6 +120,7 @@ class ProgramController extends Controller
             'details' => 'required',
             'branch_id' => 'required',
             'trainer_id' => 'required',
+            'field_id'=>'required',
             'skills' => 'required'
         ], [
             'required' => 'field-required'
@@ -131,6 +134,7 @@ class ProgramController extends Controller
         $program->pDetails = $fields['details'];
         $program->branch_id = $fields['branch_id'];
         $program->trainer_id = $fields['trainer_id'];
+        $program->field_id = $fields['field_id'];
         $program->pPhoto = $fields['photo'];
 
         $program->save();

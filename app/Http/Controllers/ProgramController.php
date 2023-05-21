@@ -15,11 +15,14 @@ class ProgramController extends Controller
 
     function getPrograms($id)
     {
-        $programs = Program::where('field_id', $id)
+        error_log($id);
+        $programs = Program::where('programs.field_id', $id)
             ->join('branches', 'branches.id', '=', 'programs.branch_id')
             ->join('companies', 'companies.id', '=', 'programs.company_id')
             ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
-            ->join('users', 'users.id', '=', 'trainers.user_id')->get();
+            ->join('users', 'users.id', '=', 'trainers.user_id')
+            ->select('programs.id','programs.pTitle','companies.cPhoto','companies.cName','programs.pStart_date',
+            'programs.pEnd_date','branches.bName','programs.pDetails','users.first_name','users.last_name')->get();
         $response = $programs;
 
         return response($response, 201);

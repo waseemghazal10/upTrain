@@ -30,6 +30,10 @@ return new class extends Migration
             $table->unsignedBigInteger('trainer_id')->nullable();;
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
 
+            $table->unsignedBigInteger('field_id')->nullable();;
+            $table->foreign('field_id')->references('id')->on('fields')->onDelete('set null');
+
+
             $table->timestamps();
         });
     }

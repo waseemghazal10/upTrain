@@ -13,9 +13,17 @@ use Error;
 
 class StudentController extends Controller
 {
-    function getStudents(Request $request)
+    function getStudents($id)
     {
-        $students = Student::join('users','users.id','=','students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields','fields.id','students.field_id')->get();
+        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields', 'fields.id', 'students.field_id')->where('fields.id', $id)->select('users.email', 'users.first_name', 'users.last_name', 'users.location_id', 'students.sPhone_number', 'students.sPhoto', 'students.field_id', 'fields.*', 'locations.*')->get();
+        $response =  $students;
+
+        return response($response, 201);
+    }
+
+    function getAllStudents()
+    {
+        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields', 'fields.id', 'students.field_id')->get();
         $response =  $students;
 
         return response($response, 201);
@@ -24,7 +32,7 @@ class StudentController extends Controller
 
     function getProgramStudents($id)
     {
-        $students = Student::where('program_id',$id)->join('users','users.id','=','students.user_id')->get();
+        $students = Student::where('program_id', $id)->join('users', 'users.id', '=', 'students.user_id')->get();
         $response =  $students;
 
         return response($response, 201);
@@ -32,27 +40,28 @@ class StudentController extends Controller
 
     function getCompanyStudents($id)
     {
-        $students = Student::where('company_id',$id)->join('users','users.id','=','students.user_id')->get();
+        $students = Student::where('company_id', $id)->join('users', 'users.id', '=', 'students.user_id')->get();
         $response =  $students;
 
         return response($response, 201);
     }
 
 
-    function deleteStudent($id)
+    function deleteStudent($email)
     {
-        $student = Student::find($id);
+        $student = Student::join('users', 'users.id', '=', 'students.user_id')->where('users.email', $email)->first();
 
         if ($student) {
-            $user = User::where('id', $student->user_id)->first();
-            if ($user) {
-                $user->delete();
-            }
+            $user = User::where('id', $student->user_id)->first()->delete();
+            // if ($user) {
+            //     $user->delete();
+            // }
             $student->delete();
+
             $response = 'The student and associated user(s) have been successfully deleted';
             return response($response, 201);
         } else {
-            $response = 'Could not find student with ID ' . $id;
+            $response = 'Could not find student with ID ' . $email;
             return response($response, 400);
         }
     }
@@ -80,33 +89,30 @@ class StudentController extends Controller
             'phone.regex' => 'phone-format',
         ]);
 
-        $user = User:: where('email',$fields['email'])->first();
+        $user = User::where('email', $fields['email'])->first();
         $user->email = $fields['email'];
         $user->first_name = $fields['firstName'];
         $user->last_name = $fields['lastName'];
         $user->location_id = $fields['location_id'];
         $user->save();
 
-        $student = Student::where ('user_id',$user->id)->first();
+        $student = Student::where('user_id', $user->id)->first();
         $student->skill()->detach();
         $student->sPhone_number = $fields['phone'];
         $student->sPhoto = $fields['photo'];
         $student->save();
 
 
-        $skills_id = explode(',',$fields['skills']);
+        $skills_id = explode(',', $fields['skills']);
         $student->skill()->attach($skills_id);
 
-        $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')->get();
+        $skillsStudent = skillsStudents::where('student_id', $student->id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')->get();
 
         $response = [
             'user' => $user,
-            'student'=>$student,
-            'skills'=>$skillsStudent,
+            'student' => $student,
+            'skills' => $skillsStudent,
         ];
-        return response($response,201);
+        return response($response, 201);
     }
-
-
-
 }

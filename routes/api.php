@@ -42,13 +42,16 @@ Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStu
 Route::get('/getCompanyTrainers/{id}', [TrainerController::class, 'getCompanyTrainers']);
 
 Route::get('/getTrainerPrograms/{name}', [ProgramController::class, 'getTrainerPrograms']);
+
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
+// Route::get('/getCompany/{name}', [CompanyController::class, 'getCompany']);
 
 
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
-Route::get('/getStudents', [StudentController::class, 'getStudents']);
+Route::get('/getStudents/{id}', [StudentController::class, 'getStudents']);
+Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
 
 
@@ -62,7 +65,7 @@ Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getAdmin', [EmployeeController::class, 'getAdmin']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
-Route::post('/admin/deleteStudent/{id}', [StudentController::class, 'deleteStudent']);//inside
+Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);//inside
 Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);//inside
 Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);//inside
 Route::delete('/admin/deleteCompany/{name}', [CompanyController::class, 'deleteCompany']);//inside

@@ -18,6 +18,8 @@ class CompanyController extends Controller
 
         return response($response, 201);
     }
+
+
     function deleteCompany($companyName)
     {
         $company = Company::where('cName', $companyName)->delete();
@@ -27,7 +29,7 @@ class CompanyController extends Controller
     }
     function getProgramCompany($companyName)
     {
-        $company = Company::where('cName', $companyName)->get();
+        $company = Company::where('cName', $companyName)->join('locations', 'locations.id', '=', 'companies.location_id')->get();
         $response = $company;
 
         return response($response, 201);

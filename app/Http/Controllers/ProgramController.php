@@ -15,11 +15,26 @@ class ProgramController extends Controller
 
     function getPrograms($id)
     {
-        $programs = Program::where('field_id', $id)
+        $programs = Program::where('programs.field_id', $id)
             ->join('branches', 'branches.id', '=', 'programs.branch_id')
             ->join('companies', 'companies.id', '=', 'programs.company_id')
             ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
-            ->join('users', 'users.id', '=', 'trainers.user_id')->get();
+            ->join('users', 'users.id', '=', 'trainers.user_id')->with('skill')
+            ->select(
+                'programs.id',
+                'programs.pTitle',
+                'companies.cPhoto',
+                'companies.cName',
+                'programs.pStart_date',
+                'programs.field_id',
+                'programs.pEnd_date',
+                'branches.bName',
+                'programs.pDetails',
+                'users.first_name',
+                'users.last_name',
+                'trainers.user_id'
+            )->get();
+
         $response = $programs;
 
         return response($response, 201);
@@ -69,7 +84,7 @@ class ProgramController extends Controller
     {
         $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('first_name', $name)->first();
 
-        $programs = Program::where('programs.trainer_id',$trainer->id)->get();
+        $programs = Program::where('programs.trainer_id', $trainer->id)->get();
 
 
         $response = $programs;
@@ -110,7 +125,7 @@ class ProgramController extends Controller
     {
 
         $fields = $request->validate([
-            'id' =>'required',
+            'id' => 'required',
             'title' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -136,8 +151,8 @@ class ProgramController extends Controller
         $program->save();
 
         $response = [
-            'program'=>$program
+            'program' => $program
         ];
-        return response($response,201);
+        return response($response, 201);
     }
 }

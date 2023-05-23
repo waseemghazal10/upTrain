@@ -206,7 +206,7 @@ class UserController extends Controller
             // error_log($student);
             $trainer = Trainer::where ('user_id',$user->id)->first();
             // error_log($trainer);
-            $employee = Employee::where ('user_id',$user->id)->first();
+            $employee = Employee::where ('user_id',$user->id)->join('fields','fields.id','employees.field_id')->first();
 
             if ($student){
                 $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')

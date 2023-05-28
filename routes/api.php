@@ -41,7 +41,7 @@ Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStu
 
 Route::get('/getCompanyTrainers/{id}', [TrainerController::class, 'getCompanyTrainers']);
 
-Route::get('/getTrainerPrograms/{name}', [ProgramController::class, 'getTrainerPrograms']);
+Route::get('/getTrainerPrograms/{email}', [ProgramController::class, 'getTrainerPrograms']);
 
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 // Route::get('/getCompany/{name}', [CompanyController::class, 'getCompany']);

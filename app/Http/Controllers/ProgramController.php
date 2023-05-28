@@ -32,7 +32,7 @@ class ProgramController extends Controller
                 'programs.pDetails',
                 'users.first_name',
                 'users.last_name',
-                'trainers.user_id'
+                // 'trainers.user_id'
             )->get();
 
         $response = $programs;
@@ -80,17 +80,19 @@ class ProgramController extends Controller
         return response($response, 201);
     }
 
-    function getTrainerPrograms($name)
+    function getTrainerPrograms($email)
     {
-        $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('first_name', $name)->first();
+        $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('users.email', $email)->select('trainers.id', 'users.first_name', 'users.last_name', 'users.email')->with('program')->first();
 
-        $programs = Program::where('programs.trainer_id', $trainer->id)->get();
-
+        $programs = Program::where('programs.trainer_id', $trainer->id)->join('trainers', 'trainers.id', '=',  'programs.trainer_id')->join('users', 'users.id', '=', 'trainers.user_id')->join('branches', 'branches.id', '=', 'programs.branch_id')->join('companies', 'companies.id', '=', 'programs.company_id')
+            ->select('branches.bName', 'programs.*', 'users.first_name', 'users.last_name','companies.cPhoto', 'companies.cName')
+            ->get();
+        error_log($trainer);
 
         $response = $programs;
 
         return response($response, 201);
-    } //doesn't work yet!!!!!
+    }
 
     function getCompanyPrograms($name)
     {

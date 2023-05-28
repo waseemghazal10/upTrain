@@ -75,7 +75,7 @@ class UserController extends Controller
         $user->save();
         $student->save();
 
-        $skills_id = explode(',',$fields['skills']);
+        $skills_id = explode(',', $fields['skills']);
         $student->skill()->attach($skills_id);
 
         session(['verification_' . $user->id => time()]);
@@ -84,16 +84,17 @@ class UserController extends Controller
         $email->setSubject("Verify Your Email");
         $email->addTo($user->email, $user->first_name . ' ' . $user->last_name);
         $email->addContent(
-            "text/html", view('emails.verification', ['code' => $code])->render()
+            "text/html",
+            view('emails.verification', ['code' => $code])->render()
         );
         $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
         try {
             $sendgrid->send($email);
             $response = [
                 'user' => $user,
-                'student'=>$student
+                'student' => $student
             ];
-            return response()->json($response,201);
+            return response()->json($response, 201);
         } catch (Exception $e) {
             return response([], 400);
         }
@@ -160,7 +161,8 @@ class UserController extends Controller
         $email->setSubject("Verify Your Email");
         $email->addTo($user->email, $user->first_name . ' ' . $user->last_name);
         $email->addContent(
-            "text/html", view('emails.verification', ['code' => $code])->render()
+            "text/html",
+            view('emails.verification', ['code' => $code])->render()
         );
         $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
         try {
@@ -178,47 +180,45 @@ class UserController extends Controller
     {
         $fields = $request->validate(
             [
-            'email' => 'required|email',
-            'password' => 'required'
+                'email' => 'required|email',
+                'password' => 'required'
             ],
             [
-            'required' => 'field-required',
-            'email.email' => 'email-format',
+                'required' => 'field-required',
+                'email.email' => 'email-format',
             ]
         );
 
         $user = User::where('email', $fields['email'])->first();
         error_log($user);
-        if($user){
+        if ($user) {
             if (!$user || !Hash::check($fields['password'], $user->password)) {
                 $response = [
                     'errors' => [
                         'message' => array('credentials-invalid')
                     ]
                 ];
-            return response($response, 400);
+                return response($response, 400);
             }
 
             $user->tokens()->delete();
 
             $student = Student::where('user_id', $user->id)->join('fields','fields.id','students.field_id')->first();
-
+            // error_log($student);
             $trainer = Trainer::where ('user_id',$user->id)->first();
             // error_log($trainer);
-            $employee = Employee::where ('user_id',$user->id)->join('fields','fields.id','employees.field_id')->first();
+            $employee = Employee::where('user_id', $user->id)->join('fields', 'fields.id', 'employees.field_id')->first();
 
-            if ($student){
-                $skillsStudent = skillsStudents:: where('student_id',$student->id)->join('skills','skills.id','=','skills_students.skill_id')
-                ->get();
+            if ($student) {
+                $skillsStudent = skillsStudents::where('student_id', $student->id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
+                    ->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
-                    ->select('users.*','locations.locationName')->get();
-                    error_log($userWithLocation);
+                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                     $response = [
                         'user' => $userWithLocation,
-                        'student'=>$student,
-                        'skills'=>$skillsStudent,
+                        'student' => $student,
+                        'skills' => $skillsStudent,
                         'token' => $token
                     ];
                 } else {
@@ -230,57 +230,64 @@ class UserController extends Controller
                     }
             }
             else if ($trainer){
-                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
-                    ->select('users.*','locations.locationName')->get();
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
                     // error_log($token);
                     $response = [
                         'user' => $userWithLocation,
-                        'trainer'=>$trainer,
+                        'trainer' => $trainer,
                         'token' => $token
                     ];
                 } else {
                     $response = [
                         'user' => $userWithLocation,
-                        'trainer'=>$trainer
+                        'trainer' => $trainer
                     ];
                 }
             }
             else if ($employee){
-                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
-                    ->select('users.*','locations.locationName')->get();
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
                     $response = [
                         'user' => $userWithLocation,
-                        'employee'=>$employee,
+                        'employee' => $employee,
                         'token' => $token
                     ];
                 } else {
                     $response = [
                         'user' => $userWithLocation,
-                        'employee'=>$employee
+                        'employee' => $employee
                     ];
                 }
             }
 
         }
         else {
-            $company = Company::where('cEmail',$fields['email'])->first();
+            $company = Company::where('email',$fields['email'])->first();
             if ($company){
-                if (!$company || !Hash::check($fields['password'], $company->cPassword)) {
+                if (!$company || !Hash::check($fields['password'], $company->password)) {
                     $response = [
                         'errors' => [
                             'message' => array('credentials-invalid')
                         ]
                     ];
-                return response($response, 400);
+                    return response($response, 400);
                 }
 
-                $response = [
-                    'company'=>$company
-                ];
+                if ($company->email_verified_at !== null) {
+                    $token = $company->createToken('upTrainToken')->plainTextToken;
+                    // error_log($token);
+                    $response = [
+                        'company'=>$company,
+                        'token' => $token
+                    ];
+                } else {
+                    $response = [
+                        'company'=>$company
+                    ];
+                }
             }
         }
         return response($response, 201);
@@ -309,7 +316,8 @@ class UserController extends Controller
             $email->setSubject("Verify Your Email");
             $email->addTo($user->email, $user->first_name . ' ' . $user->last_name);
             $email->addContent(
-                "text/html", view('emails.verification', ['code' => $code])->render()
+                "text/html",
+                view('emails.verification', ['code' => $code])->render()
             );
             $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
             try {
@@ -418,7 +426,4 @@ class UserController extends Controller
         ];
         return response($response, 201);
     }
-
-
 }
-

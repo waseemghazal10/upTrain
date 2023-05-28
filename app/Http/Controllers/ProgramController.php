@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Program;
 use App\Models\Company;
+use App\Models\Skill;
 use App\Models\skillsPrograms;
+use App\Models\skillsStudents;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+
+use function GuzzleHttp\Promise\each;
 
 class ProgramController extends Controller
 {
@@ -32,12 +37,56 @@ class ProgramController extends Controller
                 'programs.pDetails',
                 'users.first_name',
                 'users.last_name',
-                'trainers.user_id'
+                // 'trainers.user_id'
             )->get();
 
         $response = $programs;
 
         return response($response, 201);
+    }
+
+    function getRecommendedPrograms($student_id)
+    {
+        $skills = skillsStudents::where('student_id', $student_id)->pluck('skill_id')->toArray();
+
+        $url = Http::post('http://localhost:8080/recommendation/programs', [
+            'skills' => $skills,
+            'top_n' => 10,
+        ]);
+
+        $data = $url['recommended_program_ids_and_distances'];
+
+        $programIds = array_keys($data);
+        $programs = [];
+
+        foreach ($programIds as $programId) {
+            $program = Program::where('programs.id', $programId)
+                ->join('branches', 'branches.id', '=', 'programs.branch_id')
+                ->join('companies', 'companies.id', '=', 'programs.company_id')
+                ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
+                ->join('users', 'users.id', '=', 'trainers.user_id')
+                ->with('skill')
+                ->select(
+                    'programs.id',
+                    'programs.pTitle',
+                    'companies.cPhoto',
+                    'companies.cName',
+                    'programs.pStart_date',
+                    'programs.field_id',
+                    'programs.pEnd_date',
+                    'branches.bName',
+                    'programs.pDetails',
+                    'users.first_name',
+                    'users.last_name'
+                )
+                ->first(); // Use "first()" to get a single program instead of "get()"
+
+            if ($program) {
+                $programs[] = $program;
+            }
+        }
+
+        return response($programs, 201);
     }
 
 
@@ -80,17 +129,19 @@ class ProgramController extends Controller
         return response($response, 201);
     }
 
-    function getTrainerPrograms($name)
+    function getTrainerPrograms($email)
     {
-        $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('first_name', $name)->first();
+        $trainer = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->where('users.email', $email)->select('trainers.id', 'users.first_name', 'users.last_name', 'users.email')->with('program')->first();
 
-        $programs = Program::where('programs.trainer_id', $trainer->id)->get();
-
+        $programs = Program::where('programs.trainer_id', $trainer->id)->join('trainers', 'trainers.id', '=',  'programs.trainer_id')->join('users', 'users.id', '=', 'trainers.user_id')->join('branches', 'branches.id', '=', 'programs.branch_id')->join('companies', 'companies.id', '=', 'programs.company_id')
+            ->select('branches.bName', 'programs.*', 'users.first_name', 'users.last_name','companies.cPhoto', 'companies.cName')
+            ->get();
+        error_log($trainer);
 
         $response = $programs;
 
         return response($response, 201);
-    } //doesn't work yet!!!!!
+    }
 
     function getCompanyPrograms($name)
     {

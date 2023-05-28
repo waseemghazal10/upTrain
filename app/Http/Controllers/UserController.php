@@ -188,8 +188,7 @@ class UserController extends Controller
         );
 
         $user = User::where('email', $fields['email'])->first();
-        // error_log($user);
-
+        error_log($user);
         if($user){
             if (!$user || !Hash::check($fields['password'], $user->password)) {
                 $response = [
@@ -203,7 +202,7 @@ class UserController extends Controller
             $user->tokens()->delete();
 
             $student = Student::where('user_id', $user->id)->join('fields','fields.id','students.field_id')->first();
-            // error_log($student);
+
             $trainer = Trainer::where ('user_id',$user->id)->first();
             // error_log($trainer);
             $employee = Employee::where ('user_id',$user->id)->join('fields','fields.id','employees.field_id')->first();
@@ -213,7 +212,9 @@ class UserController extends Controller
                 ->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
+                    $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
+                    ->select('users.*','locations.locationName')->get();
+                    error_log($userWithLocation);
                     $response = [
                         'user' => $userWithLocation,
                         'student'=>$student,
@@ -229,7 +230,8 @@ class UserController extends Controller
                     }
             }
             else if ($trainer){
-                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
+                    ->select('users.*','locations.locationName')->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
                     // error_log($token);
@@ -246,7 +248,8 @@ class UserController extends Controller
                 }
             }
             else if ($employee){
-                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')->first();
+                $userWithLocation = User :: where('email', $fields['email'])->join('locations','locations.id','=','users.location_id')
+                    ->select('users.*','locations.locationName')->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
                     $response = [
@@ -264,9 +267,9 @@ class UserController extends Controller
 
         }
         else {
-            $company = Company::where('email',$fields['email'])->first();
+            $company = Company::where('cEmail',$fields['email'])->first();
             if ($company){
-                if (!$company || !Hash::check($fields['password'], $company->password)) {
+                if (!$company || !Hash::check($fields['password'], $company->cPassword)) {
                     $response = [
                         'errors' => [
                             'message' => array('credentials-invalid')
@@ -274,20 +277,10 @@ class UserController extends Controller
                     ];
                 return response($response, 400);
                 }
-                // $company->tokens()->delete();
 
-                if ($company->email_verified_at !== null) {
-                    $token = $company->createToken('upTrainToken')->plainTextToken;
-                    // error_log($token);
-                    $response = [
-                        'company'=>$company,
-                        'token' => $token
-                    ];
-                } else {
-                    $response = [
-                        'company'=>$company
-                    ];
-                }
+                $response = [
+                    'company'=>$company
+                ];
             }
         }
         return response($response, 201);

@@ -31,11 +31,12 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/verify', [UserController::class, 'verify']);
 Route::post('/resendCode', [UserController::class, 'resendCode']);
+
 Route::post('/requestResetPassword', [UserController::class, 'requestReset']);//inside
 Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);//inside
 Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
 
-Route::get('/getProgramStudents/{id}', [StudentController::class, 'getProgramStudents']);
+Route::get('/getProgramStudents/{program_id}', [StudentController::class, 'getProgramStudents']);
 Route::get('/getTrainerStudents/{id}', [StudentController::class, 'getTrainerStudents']);
 Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStudents']);
 
@@ -55,7 +56,7 @@ Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
 
 
-Route::get('/getPrograms/{id}', [ProgramController::class, 'getPrograms']);
+Route::get('/getPrograms/{field_id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);
 Route::get('/getProgramTrainer/{name}', [TrainerController::class, 'getProgramTrainer']);
 

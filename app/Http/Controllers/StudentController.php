@@ -30,9 +30,9 @@ class StudentController extends Controller
     }
 
 
-    function getProgramStudents($id)
+    function getProgramStudents($program_id)
     {
-        $students = Student::where('program_id', $id)->join('users', 'users.id', '=', 'students.user_id')->get();
+        $students = Student::where('program_id', $program_id)->join('users', 'users.id', '=', 'students.user_id')->get();
         $response =  $students;
 
         return response($response, 201);

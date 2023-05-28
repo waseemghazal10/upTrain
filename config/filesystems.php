@@ -79,6 +79,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'StudentsCvs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/StudentsCvs'),
+            'url' => env('APP_URL') . '/StudentsCvs',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

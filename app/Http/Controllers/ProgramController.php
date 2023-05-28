@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Storage;
 class ProgramController extends Controller
 {
 
-    function getPrograms($id)
+    function getPrograms($field_id)
     {
-        $programs = Program::where('programs.field_id', $id)
+        $programs = Program::where('programs.field_id', $field_id)
             ->join('branches', 'branches.id', '=', 'programs.branch_id')
             ->join('companies', 'companies.id', '=', 'programs.company_id')
             ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
@@ -106,6 +106,8 @@ class ProgramController extends Controller
 
         return response($response, 201);
     }
+
+
 
     function deleteProgram($id)
     {

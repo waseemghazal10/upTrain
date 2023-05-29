@@ -151,7 +151,20 @@ class ProgramController extends Controller
             ->join('branches', 'branches.id', '=', 'programs.branch_id')
             ->join('companies', 'companies.id', '=', 'programs.company_id')
             ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
-            ->join('users', 'users.id', '=', 'trainers.user_id')->get();
+            ->join('users', 'users.id', '=', 'trainers.user_id')->with('skill')->select(
+                'programs.id',
+                'programs.pTitle',
+                'companies.cPhoto',
+                'companies.cName',
+                'programs.pStart_date',
+                'programs.field_id',
+                'programs.pEnd_date',
+                'branches.bName',
+                'programs.pDetails',
+                'users.first_name',
+                'users.last_name',
+                // 'trainers.user_id'
+            )->get();
 
         $response = $programs;
 

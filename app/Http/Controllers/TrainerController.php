@@ -14,9 +14,11 @@ class TrainerController extends Controller
     //
     function getTrainers(Request $request)
     {
-        $trainers = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->get();
-        $response = $trainers;
+        $trainers = Trainer::join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')
+        ->join('locations','locations.id','=','users.location_id')
+        ->select('trainers.*','users.first_name','users.last_name','users.email','locations.locationName','companies.cName')->get();
 
+        $response = $trainers;
         return response($response, 201);
     }
 
@@ -75,37 +77,43 @@ class TrainerController extends Controller
         return response($response, 201);
     }
 
-    function getProgramTrainer($trainerName)
+    function getProgramTrainer($trainerEmail)
     {
-        $trainer = Trainer::where('first_name', $trainerName)->join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')->get();
+        $user = User::where ('email',$trainerEmail)->first();
+
+        $trainer = Trainer::where('trainers.user_id',$user->id)->join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')
+        ->join('locations','locations.id','=','users.location_id')
+        ->select('trainers.*','users.first_name','users.last_name','users.email','locations.locationName','companies.cName')->get();
 
         $response = $trainer;
 
         return response($response, 201);
     }
 
-    function getCompanyTrainers($id)
+    function getCompanyTrainers($company_id)
     {
-        $trainers = Trainer::where('company_id', $id)->get();
+        $trainers = Trainer::where('company_id', $company_id)->join('users', 'users.id', '=', 'trainers.user_id')
+        ->join('locations','locations.id','=','users.location_id')
+        ->select('trainers.*','users.first_name','users.last_name','users.email','locations.locationName')->get();
+
+
         $response = $trainers;
 
         return response($response, 201);
     }
 
-    function deleteTrainer($id)
+    function deleteTrainer($trainer_id)
     {
-        $trainer = Trainer::find($id);
+        $trainer = Trainer::find($trainer_id);
 
         if ($trainer) {
-            $user = User::where('id', $trainer->user_id)->first();
-            if ($user) {
-                $user->delete();
-            }
+            $user = User::where('id', $trainer->user_id)->first()->delete();
+
             $trainer->delete();
             $response = 'The trainer and associated user(s) have been successfully deleted';
             return response($response, 201);
         } else {
-            $response = 'Could not find trainer with ID ' . $id;
+            $response = 'Could not find trainer with ID ' . $trainer_id;
             return response($response, 400);
         }
     }

@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 class BranchController extends Controller
 {
     //
-    function getBranches($id)
+    function getBranches($field_id)
     {
 
-        $branches = Branch::where('field_id', $id)->get();
+        $branches = Branch::where('field_id', $field_id)->get();
         $response = $branches;
 
         return response($response, 201);

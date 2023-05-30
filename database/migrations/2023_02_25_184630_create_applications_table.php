@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->integer('status') -> default(0);
             $table->String('cv')->default("");
-            $table->String('details')->default("");
             $table->timestamps();
 
             $table->unsignedBigInteger('program_id')->nullable();;

@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Skill;
 use App\Models\skillsPrograms;
 use App\Models\skillsStudents;
+use App\Models\Student;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -85,7 +86,9 @@ class ProgramController extends Controller
                 $programs[] = $program;
             }
         }
-
+        foreach($programs as $program){
+            error_log($program);
+        }
         return response($programs, 201);
     }
 
@@ -160,9 +163,9 @@ class ProgramController extends Controller
 
 
 
-    function deleteProgram($id)
+    function deleteProgram($program_id)
     {
-        $program = Program::find($id);
+        $program = Program::find($program_id);
 
         if ($program) {
             $program->delete();

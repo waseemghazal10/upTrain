@@ -14,7 +14,8 @@ class EmployeeController extends Controller
     function getAdmin(){
         $admin = Employee::where('eRole',1)->join('users','users.id','=','employees.user_id')
         ->join('fields','fields.id','=','employees.field_id')
-        ->join('locations','locations.id','=','users.location_id')->get();
+        ->join('locations','locations.id','=','users.location_id')
+        ->select('employees.*','users.first_name','users.last_name','users.email','locations.locationName','fields.fName')->get();
         $response = $admin;
 
         return response($response, 201);
@@ -24,7 +25,8 @@ class EmployeeController extends Controller
     {
         $employees = Employee::where('eRole',0)->join('users','users.id','=','employees.user_id')
         ->join('locations','locations.id','=','users.location_id')
-        ->join('fields','fields.id','=','employees.field_id')->get();
+        ->join('fields','fields.id','=','employees.field_id')
+        ->select('employees.*','users.first_name','users.last_name','users.email','locations.locationName','fields.fName')->get();
         $response = $employees;
 
         return response($response, 201);

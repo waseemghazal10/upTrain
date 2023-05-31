@@ -27,6 +27,7 @@ class CompanyController extends Controller
         $response = 'deleted successfully';
         return response($response, 201);
     }
+    
     function getProgramCompany($companyName)
     {
         $company = Company::where('cName', $companyName)->join('locations', 'locations.id', '=', 'companies.location_id')->get();

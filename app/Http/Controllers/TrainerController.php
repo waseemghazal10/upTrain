@@ -75,9 +75,9 @@ class TrainerController extends Controller
         return response($response, 201);
     }
 
-    function getProgramTrainer($trainerName)
+    function getProgramTrainer($email)
     {
-        $trainer = Trainer::where('first_name', $trainerName)->join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')->get();
+        $trainer = Trainer::where('tEmail', $email)->join('users', 'users.id', '=', 'trainers.user_id')->join('companies', 'companies.id', '=', 'trainers.company_id')->get();
 
         $response = $trainer;
 

@@ -59,7 +59,7 @@ Route::get('/getLocations', [LocationController::class, 'getLocations']);
 Route::get('/getPrograms/{field_id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getRecommendedPrograms/{student_id}', [ProgramController::class, 'getRecommendedPrograms']);
 Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);
-Route::get('/getProgramTrainer/{name}', [TrainerController::class, 'getProgramTrainer']);
+Route::get('/getProgramTrainer/{email}', [TrainerController::class, 'getProgramTrainer']);
 
 
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);

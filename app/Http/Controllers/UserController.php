@@ -205,9 +205,9 @@ class UserController extends Controller
 
             $student = Student::where('user_id', $user->id)->join('fields', 'fields.id', 'students.field_id')
             ->select('students.id','students.sPhone_number','students.sPhoto','students.user_id','students.field_id','fields.fName','fields.college_id')->first();
-            // error_log($student);
+
             $trainer = Trainer::where ('user_id',$user->id)->first();
-            // error_log($trainer);
+
             $employee = Employee::where('user_id', $user->id)->join('fields', 'fields.id', 'employees.field_id')->first();
 
             if ($student) {

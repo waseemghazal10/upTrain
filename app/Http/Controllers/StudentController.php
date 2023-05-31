@@ -13,9 +13,11 @@ use Error;
 
 class StudentController extends Controller
 {
-    function getStudents($id)
+    function getStudents($field_id)
     {
-        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields', 'fields.id', 'students.field_id')->where('fields.id', $id)->select('users.email', 'users.first_name', 'users.last_name', 'users.location_id', 'students.sPhone_number', 'students.sPhoto', 'students.field_id', 'fields.*', 'locations.*')->get();
+        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')
+        ->join('fields', 'fields.id', 'students.field_id')->where('fields.id', $field_id)
+        ->select('students.*' , 'users.email', 'users.first_name', 'users.last_name', 'users.location_id','fields.fName', 'locations.locationName')->get();
         $response =  $students;
 
         return response($response, 201);
@@ -23,7 +25,9 @@ class StudentController extends Controller
 
     function getAllStudents()
     {
-        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')->join('fields', 'fields.id', 'students.field_id')->get();
+        $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')
+        ->join('fields', 'fields.id', 'students.field_id')
+        ->select('students.*' , 'users.email', 'users.first_name', 'users.last_name', 'users.location_id','fields.fName', 'locations.locationName')->get();
         $response =  $students;
 
         return response($response, 201);
@@ -32,15 +36,32 @@ class StudentController extends Controller
 
     function getProgramStudents($program_id)
     {
-        $students = Student::where('program_id', $program_id)->join('users', 'users.id', '=', 'students.user_id')->get();
+        $students = Student::where('program_id', $program_id)->join('users', 'users.id', '=', 'students.user_id')
+        ->join('fields','fields.id','=','students.field_id')->join('locations','locations.id','=','users.location_id')
+        ->select('student.*','users.first_name','users.last_name','users.email','locations.locationName','fields.fName')->get();
+
         $response =  $students;
 
         return response($response, 201);
     }
 
-    function getCompanyStudents($id)
+    function getTrainerStudents($trainer_id)
     {
-        $students = Student::where('company_id', $id)->join('users', 'users.id', '=', 'students.user_id')->get();
+        $students = Student::where('trainer_id', $trainer_id)->join('users', 'users.id', '=', 'students.user_id')
+        ->join('fields','fields.id','=','students.field_id')->join('locations','locations.id','=','users.location_id')
+        ->select('students.*','users.first_name','users.last_name','users.email','locations.locationName','fields.fName')->get();
+
+        $response =  $students;
+
+        return response($response, 201);
+    }
+
+    function getCompanyStudents($company_id)
+    {
+        $students = Student::where('company_id', $company_id)->join('users', 'users.id', '=', 'students.user_id')
+        ->join('fields','fields.id','=','students.field_id')->join('locations','locations.id','=','users.location_id')
+        ->select('students.*','users.first_name','users.last_name','users.email','locations.locationName','fields.fName')->get();
+
         $response =  $students;
 
         return response($response, 201);
@@ -49,13 +70,11 @@ class StudentController extends Controller
 
     function deleteStudent($email)
     {
+        error_log($email);
         $student = Student::join('users', 'users.id', '=', 'students.user_id')->where('users.email', $email)->first();
 
         if ($student) {
             $user = User::where('id', $student->user_id)->first()->delete();
-            // if ($user) {
-            //     $user->delete();
-            // }
             $student->delete();
 
             $response = 'The student and associated user(s) have been successfully deleted';

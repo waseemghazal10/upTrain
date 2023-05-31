@@ -13,7 +13,8 @@ class CompanyController extends Controller
     //
     function getCompanies(Request $request)
     {
-        $companies = Company::join('locations', 'locations.id', '=', 'companies.location_id')->get();
+        $companies = Company::join('locations', 'locations.id', '=', 'companies.location_id')
+        ->select('companies.*','locations.locationName')->get();
         $response = $companies;
 
         return response($response, 201);

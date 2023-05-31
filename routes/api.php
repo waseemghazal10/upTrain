@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
@@ -37,21 +38,21 @@ Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword
 Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
 
 Route::get('/getProgramStudents/{program_id}', [StudentController::class, 'getProgramStudents']);
-Route::get('/getTrainerStudents/{id}', [StudentController::class, 'getTrainerStudents']);
-Route::get('/getCompanyStudents/{id}', [StudentController::class, 'getCompanyStudents']);
+Route::get('/getTrainerStudents/{trainer_id}', [StudentController::class, 'getTrainerStudents']);
+Route::get('/getCompanyStudents/{company_id}', [StudentController::class, 'getCompanyStudents']);
 
-Route::get('/getCompanyTrainers/{id}', [TrainerController::class, 'getCompanyTrainers']);
+Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCompanyTrainers']);
 
-Route::get('/getTrainerPrograms/{email}', [ProgramController::class, 'getTrainerPrograms']);
+Route::get('/getTrainerPrograms/{email}', [ProgramController::class, 'getTrainerPrograms']);//check if wepu;; can get the id
 
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
-// Route::get('/getCompany/{name}', [CompanyController::class, 'getCompany']);
+
 
 
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
-Route::get('/getbranches/{id}', [BranchController::class, 'getbranches']);
-Route::get('/getStudents/{id}', [StudentController::class, 'getStudents']);
+Route::get('/getbranches/{field_id}', [BranchController::class, 'getbranches']);
+Route::get('/getStudents/{field_id}', [StudentController::class, 'getStudents']);
 Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
 
@@ -59,7 +60,7 @@ Route::get('/getLocations', [LocationController::class, 'getLocations']);
 Route::get('/getPrograms/{field_id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getRecommendedPrograms/{student_id}', [ProgramController::class, 'getRecommendedPrograms']);
 Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);
-Route::get('/getProgramTrainer/{email}', [TrainerController::class, 'getProgramTrainer']);
+Route::get('/getProgramTrainer/{name}', [TrainerController::class, 'getProgramTrainer']);
 
 
 Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
@@ -68,10 +69,13 @@ Route::get('/getAdmin', [EmployeeController::class, 'getAdmin']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
 Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);//inside
-Route::post('/company/deleteTrainer/{id}', [TrainerController::class, 'deleteTrainer']);//inside
-Route::post('/company/deleteProgram/{id}', [ProgramController::class, 'deleteProgram']);//inside
-Route::delete('/admin/deleteCompany/{name}', [CompanyController::class, 'deleteCompany']);//inside
+Route::post('/company/deleteTrainer/{trainer_id}', [TrainerController::class, 'deleteTrainer']);//inside
+Route::post('/company/deleteProgram/{program_id}', [ProgramController::class, 'deleteProgram']);//inside
+Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);//inside
 Route::delete('/admin/deleteEmployee/{email}', [EmployeeController::class, 'deleteEmployee']);//inside
+
+
+
 
 
 Route::post('/updateStudent', [StudentController::class, 'updateStudent']);//inside
@@ -84,7 +88,14 @@ Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);//i
 
 Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);//inside
 
+Route::post('/addApplication', [ApplicationController::class, 'addApplication']);//inside
+Route::get('/getApplications/{program_id}', [ApplicationController::class, 'getApplications']);
+Route::get('/getStudentApplications/{student_id}', [ApplicationController::class, 'getStudentApplications']);
+Route::get('/downloadFile/{application_id}',[ApplicationController::class, 'downloadFile']);
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::post('/logout', [UserController::class, 'logout']);
 
 

@@ -98,7 +98,8 @@ class ApplicationController extends Controller
         if (!Storage::exists($filePath)) {
             return response()->json(['message' => 'File not found'], 404);
         }
-
+        $application->status = 2;
+        $application->save();
         return Storage::download($filePath);
     }
 

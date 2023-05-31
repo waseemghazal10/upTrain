@@ -190,7 +190,7 @@ class UserController extends Controller
         );
 
         $user = User::where('email', $fields['email'])->first();
-        error_log($user);
+        // error_log($user);
         if ($user) {
             if (!$user || !Hash::check($fields['password'], $user->password)) {
                 $response = [
@@ -215,6 +215,7 @@ class UserController extends Controller
                     ->get();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
+                    error_log($token);
                     $userWithLocation = User::where('email', $fields['email'])->join('locations', 'locations.id', '=', 'users.location_id')
                     ->select('users.id','users.email','users.first_name','users.last_name','users.password','users.location_id','locations.locationName')->first();
                     $response = [
@@ -236,7 +237,7 @@ class UserController extends Controller
                 ->select('users.id','users.email','users.first_name','users.last_name','users.password','users.location_id','locations.locationName')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
-                    // error_log($token);
+                    error_log($token);
                     $response = [
                         'user' => $userWithLocation,
                         'trainer' => $trainer,
@@ -254,6 +255,7 @@ class UserController extends Controller
                 ->select('users.id','users.email','users.first_name','users.last_name','users.password','users.location_id','locations.locationName')->first();
                 if ($user->email_verified_at !== null) {
                     $token = $user->createToken('upTrainToken')->plainTextToken;
+                    error_log($token);
                     $response = [
                         'user' => $userWithLocation,
                         'employee' => $employee,
@@ -287,7 +289,7 @@ class UserController extends Controller
         return response($response, 201);
     }
 
-    function requestReset(Request $request)
+    function requestReset(Request $request) // link send token with url 
     {
         $fields = $request->validate(
             [
@@ -300,7 +302,7 @@ class UserController extends Controller
         );
         $user = User::where('email', $request->email)->first();
         if ($user) {
-            $code = random_int(0, 9999);
+            $code = random_int(0, 9999); // string 
             $code = str_pad($code, 4, 0, STR_PAD_LEFT);
             $user->reset_token = bcrypt($code);
             $user->save();

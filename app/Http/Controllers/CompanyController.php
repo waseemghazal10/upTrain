@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,7 +29,7 @@ class CompanyController extends Controller
         $response = 'deleted successfully';
         return response($response, 201);
     }
-    
+
     function getProgramCompany($companyName)
     {
         $company = Company::where('cName', $companyName)->join('locations', 'locations.id', '=', 'companies.location_id')->get();
@@ -69,14 +70,30 @@ class CompanyController extends Controller
             'cPhone_number' => $fields['phone']
         ]);
 
+
         $code = random_int(0, 9999);
         $code = str_pad($code, 4, 0, STR_PAD_LEFT);
         $company->verification_token = bcrypt($code);
         $company->save();
 
-        $response = [
-            'company' => $company,
-        ];
+        $email = new \SendGrid\Mail\Mail();
+        $email->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+        $email->setSubject("Confirmation Company Profile");
+        $email->addTo($company->cEmail, $company->cName);
+        $email->addContent(
+            "text/html",
+            view('emails.company_profile', ['password' => $fields['password']])->render()
+        );
+        $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+        try {
+            $sendgrid->send($email);
+            $response = [
+                'company' => $company,
+            ];
+            return response()->json($response, 201);
+        } catch (Exception $e) {
+            return response([], 400);
+        }
 
         return response($response, 201);
     }

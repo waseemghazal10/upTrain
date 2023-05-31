@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\skillsStudents;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
@@ -20,19 +22,17 @@ class ApplicationController extends Controller
         ], [
             'required' => 'field-required',
         ]);
-        // error_log($request);
+
         $student = Student:: where ('students.id',$request->student_id)
         ->join('users','users.id','=','students.user_id')
         ->select('users.first_name','users.last_name')->first();
-        // error_log($student);
+
         $file = $request->file('pdf_file');
-        // error_log($file);
-        $filename = $student->first_name . '_' . $student->last_name . '_' . $request->program_id . '.' . $file->getClientOriginalExtension();
-        error_log($filename);
+
+        $filename = $student->first_name . '_' . $student->last_name . '_' . $request->program_id . '.';
+
         $path = $file->storeAs('public/StudentsCvs', $filename);
-        // error_log($path);
-        $url = Storage::url($path);
-        error_log($url);
+
 
         $application = Application::create([
             'status' => 0,
@@ -41,9 +41,21 @@ class ApplicationController extends Controller
             'student_id' => $request->student_id
         ]);
 
+        $applications = Application::where('applications.program_id', $request->program_id)
+            ->where('applications.student_id', $request->student_id)
+            ->join('students', 'students.id', '=', 'applications.student_id')
+            ->join('users', 'users.id', '=', 'students.user_id')
+            ->join('locations', 'locations.id', '=', 'users.location_id')
+            ->select('applications.*', 'students.sPhone_number', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName')
+            ->first();
+
+        $skillsStudent = skillsStudents::where('student_id', $request->student_id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
+        ->select('skName')->get();
+
 
         $response = [
-            'application' => $application,
+            'application' => $applications,
+            'skills' => $skillsStudent
         ];
         return response($response, 201);
     }
@@ -70,19 +82,34 @@ class ApplicationController extends Controller
 
 
     public function downloadFile($application_id)
-{
-    $application = Application::find($application_id);
+    {
+        $application = Application::find($application_id);
 
-    if (!$application) {
-        return response()->json(['message' => 'Application not found'], 404);
+        if (!$application) {
+            return response()->json(['message' => 'Application not found'], 404);
+        }
+
+        $filePath = 'public/StudentsCvs/' . $application->cv;
+        error_log($filePath);
+        if (!Storage::exists($filePath)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        return Storage::download($filePath);
     }
 
-    $filePath = 'public/StudentsCvs/' . $application->cv;
-    error_log($filePath);
-    if (!Storage::exists($filePath)) {
-        return response()->json(['message' => 'File not found'], 404);
-    }
+    public function acceptApplication($application_id)
+    {
+        $application = Application::find($application_id);
 
-    return Storage::download($filePath);
-}
+        if (!$application) {
+            return response()->json(['message' => 'Application not found'], 404);
+        }
+
+        $application->status = 3;
+
+        $application->save();
+
+        return response()->json(['message' => 'Application accepted succefully'], 201);
+    }
 }

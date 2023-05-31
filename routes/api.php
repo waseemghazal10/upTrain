@@ -42,9 +42,7 @@ Route::get('/getTrainerStudents/{trainer_id}', [StudentController::class, 'getTr
 Route::get('/getCompanyStudents/{company_id}', [StudentController::class, 'getCompanyStudents']);
 
 Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCompanyTrainers']);
-
 Route::get('/getTrainerPrograms/{email}', [ProgramController::class, 'getTrainerPrograms']);//check if wepu;; can get the id
-
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
 
@@ -68,41 +66,41 @@ Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getAdmin', [EmployeeController::class, 'getAdmin']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 
-Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);//inside
-Route::post('/company/deleteTrainer/{trainer_id}', [TrainerController::class, 'deleteTrainer']);//inside
-Route::post('/company/deleteProgram/{program_id}', [ProgramController::class, 'deleteProgram']);//inside
-Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);//inside
-Route::delete('/admin/deleteEmployee/{email}', [EmployeeController::class, 'deleteEmployee']);//inside
+
+Route::post('/company/deleteTrainer/{trainer_id}', [TrainerController::class, 'deleteTrainer']);
+Route::post('/company/deleteProgram/{program_id}', [ProgramController::class, 'deleteProgram']);
+Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
+Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 
-
-
-
-Route::post('/updateStudent', [StudentController::class, 'updateStudent']);//inside
-Route::post('/updateTrainer', [TrainerController::class, 'updateTrainer']);//inside
-Route::post('/updateEmployee', [EmployeeController::class, 'updateEmployee']);//inside
-Route::post('/updateCompany', [CompanyController::class, 'updateCompany']);//inside
-Route::post('/updateProgram', [ProgramController::class, 'updateProgram']);//inside
-
-Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);//inside
-
-Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);//inside
-
-Route::post('/addApplication', [ApplicationController::class, 'addApplication']);//inside
 Route::get('/getApplications/{program_id}', [ApplicationController::class, 'getApplications']);
 Route::get('/getStudentApplications/{student_id}', [ApplicationController::class, 'getStudentApplications']);
-Route::get('/downloadFile/{application_id}',[ApplicationController::class, 'downloadFile']);
-Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
-Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
+
+
+
+////////////////////////////////////////
+    Route::post('/logout', [UserController::class, 'logout']);
+////
+
+    Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
+    Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);
+    Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);
+    Route::delete('/admin/deleteEmployee/{email}', [EmployeeController::class, 'deleteEmployee']);
+    Route::post('/admin/addCompany', [CompanyController::class, 'addCompany']);
+
+
+    Route::post('/updateStudent', [StudentController::class, 'updateStudent']);
+    Route::post('/updateTrainer', [TrainerController::class, 'updateTrainer']);
+    Route::post('/updateEmployee', [EmployeeController::class, 'updateEmployee']);
+    Route::post('/updateCompany', [CompanyController::class, 'updateCompany']);
+    Route::post('/updateProgram', [ProgramController::class, 'updateProgram']);
+
+    Route::post('/addApplication', [ApplicationController::class, 'addApplication']);
+    Route::get('/downloadFile/{application_id}',[ApplicationController::class, 'downloadFile']);
+    Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
+    Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::post('/logout', [UserController::class, 'logout']);
-
-
-    Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
-
-
-
-    Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
+    
 });

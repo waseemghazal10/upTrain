@@ -42,21 +42,20 @@ class ApplicationController extends Controller
             'student_id' => $request->student_id
         ]);
 
-        $applications = Application::where('applications.program_id', $request->program_id)
-            ->where('applications.student_id', $request->student_id)
-            ->join('students', 'students.id', '=', 'applications.student_id')
-            ->join('users', 'users.id', '=', 'students.user_id')
-            ->join('locations', 'locations.id', '=', 'users.location_id')
-            ->select('applications.*', 'students.sPhone_number', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName')
-            ->first();
+        // $applications = Application::where('applications.program_id', $request->program_id)
+        //     ->where('applications.student_id', $request->student_id)
+        //     ->join('students', 'students.id', '=', 'applications.student_id')
+        //     ->join('users', 'users.id', '=', 'students.user_id')
+        //     ->join('locations', 'locations.id', '=', 'users.location_id')
+        //     ->select('applications.*', 'students.sPhone_number', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName')
+        //     ->first();
 
-        $skillsStudent = skillsStudents::where('student_id', $request->student_id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
-        ->select('skName')->get();
+        // $skillsStudent = skillsStudents::where('student_id', $request->student_id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
+        // ->select('skName')->get();
 
 
         $response = [
-            'application' => $applications,
-            'skills' => $skillsStudent
+            'application' => $application,
         ];
         return response($response, 201);
     }
@@ -65,10 +64,24 @@ class ApplicationController extends Controller
     function getApplications($program_id)
     {
 
-        $applications = Application::where('program_id', $program_id)->join('programs', 'programs.id', '=', 'applications.program_id')
-            ->select('applications.*', 'programs.pTitle')->get();
+        $application = Application:: find($program_id);
 
-        $response = $applications;
+        $applications = Application::where('applications.program_id', $application->program_id)
+            ->where('applications.student_id', $application->student_id)
+            ->join('students', 'students.id', '=', 'applications.student_id')
+            ->join('users', 'users.id', '=', 'students.user_id')
+            ->join('locations', 'locations.id', '=', 'users.location_id')
+            ->join('programs', 'programs.id', '=', 'applications.program_id')
+            ->select('applications.*', 'students.sPhone_number', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName')
+            ->first();
+
+        $skillsStudent = skillsStudents::where('student_id', $application->student_id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
+        ->select('skName')->get();
+
+        $response = [
+            'application' => $applications,
+            'skills' => $skillsStudent
+        ];
         return response($response, 201);
     }
 

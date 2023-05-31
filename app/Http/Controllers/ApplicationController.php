@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Program;
 use App\Models\skillsStudents;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -112,8 +113,15 @@ class ApplicationController extends Controller
         }
 
         $application->status = 3;
-
         $application->save();
+
+        $student = Student::find($application->student_id);
+        $student-> program_id = $application->program_id;
+
+        $program = Program::find($application->program_id);
+        $student->trainer_id = $program->trainer_id;
+        $student->company_id = $program->company_id;
+        $student->save();
 
         return response()->json(['message' => 'Application accepted succefully'], 201);
     }

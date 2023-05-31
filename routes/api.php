@@ -93,6 +93,7 @@ Route::get('/getApplications/{program_id}', [ApplicationController::class, 'getA
 Route::get('/getStudentApplications/{student_id}', [ApplicationController::class, 'getStudentApplications']);
 Route::get('/downloadFile/{application_id}',[ApplicationController::class, 'downloadFile']);
 Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
+Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 

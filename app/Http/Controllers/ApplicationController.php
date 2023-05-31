@@ -61,28 +61,32 @@ class ApplicationController extends Controller
     }
 
 
-    function getApplications($program_id){
-
-        $applications = Application:: where ('program_id',$program_id)->get();
-
-        $response = $applications;
-        return response($response,201);
-    }
-
-
-
-    function getStudentApplications($student_id){
-        $applications = Application:: where ('student_id',$student_id)
-        ->join('programs','programs.id','=','applications.program_id')
-        ->select('applications.*','programs.pTitle')->get();
-
-        $response = $applications;
-        return response($response,201);
-    }
-
-
-    public function downloadFile($application_id)
+    function getApplications($program_id)
     {
+
+        $applications = Application::where('program_id', $program_id)->join('programs', 'programs.id', '=', 'applications.program_id')
+            ->select('applications.*', 'programs.pTitle')->get();
+
+        $response = $applications;
+        return response($response, 201);
+    }
+
+
+
+    function getStudentApplications($student_id)
+    {
+        $applications = Application::where('student_id', $student_id)
+            ->join('programs', 'programs.id', '=', 'applications.program_id')
+            ->select('applications.*', 'programs.pTitle')->get();
+
+        $response = $applications;
+        return response($response, 201);
+    }
+
+
+    function downloadFile($application_id)
+    {
+
         $application = Application::find($application_id);
 
         if (!$application) {
@@ -90,7 +94,7 @@ class ApplicationController extends Controller
         }
 
         $filePath = 'public/StudentsCvs/' . $application->cv;
-        error_log($filePath);
+
         if (!Storage::exists($filePath)) {
             return response()->json(['message' => 'File not found'], 404);
         }
@@ -98,7 +102,7 @@ class ApplicationController extends Controller
         return Storage::download($filePath);
     }
 
-    public function acceptApplication($application_id)
+    function acceptApplication($application_id)
     {
         $application = Application::find($application_id);
 
@@ -107,6 +111,21 @@ class ApplicationController extends Controller
         }
 
         $application->status = 3;
+
+        $application->save();
+
+        return response()->json(['message' => 'Application accepted succefully'], 201);
+    }
+
+    function declineApplication($application_id)
+    {
+        $application = Application::find($application_id);
+
+        if (!$application) {
+            return response()->json(['message' => 'Application not found'], 404);
+        }
+
+        $application->status = 4;
 
         $application->save();
 

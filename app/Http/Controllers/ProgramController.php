@@ -82,7 +82,10 @@ class ProgramController extends Controller
                     'branches.bName',
                     'programs.pDetails',
                     'users.first_name',
-                    'users.last_name'
+                    'users.last_name',
+                    'users.email',
+                    'trainers.tPhone_number',
+                    'trainers.tPhoto'
                 )
                 ->first(); // Use "first()" to get a single program instead of "get()"
 
@@ -168,6 +171,10 @@ class ProgramController extends Controller
                 'programs.pDetails',
                 'users.first_name',
                 'users.last_name',
+                'users.email',
+                'trainers.tPhone_number',
+                'trainers.tPhoto'
+
                 // 'trainers.user_id'
             )->get();
 

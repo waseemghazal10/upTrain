@@ -69,7 +69,8 @@ class ApplicationController extends Controller
             ->join('locations', 'locations.id', '=', 'users.location_id')
             ->join('programs', 'programs.id', '=', 'applications.program_id')
             ->join('fields', 'fields.id', '=', 'students.field_id')
-            ->select('applications.*', 'students.sPhone_number', 'students.sPhoto', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName', 'locations.id AS location_id', 'fields.id AS field_id', 'fields.fName')
+            ->select('applications.*', 'students.sPhone_number', 'students.sPhoto', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName',
+             'locations.id AS location_id', 'fields.id AS field_id', 'fields.fName','programs.pTitle')
             ->get();
 
         $response = [];

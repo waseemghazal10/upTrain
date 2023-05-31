@@ -21,9 +21,9 @@ class ApplicationController extends Controller
             'required' => 'field-required',
         ]);
         // error_log($request);
-        $student = Student:: where ('students.id',$request->student_id)
-        ->join('users','users.id','=','students.user_id')
-        ->select('users.first_name','users.last_name')->first();
+        $student = Student::where('students.id', $request->student_id)
+            ->join('users', 'users.id', '=', 'students.user_id')
+            ->select('users.first_name', 'users.last_name')->first();
         // error_log($student);
         $file = $request->file('pdf_file');
         // error_log($file);
@@ -49,40 +49,43 @@ class ApplicationController extends Controller
     }
 
 
-    function getApplications($program_id){
+    function getApplications($program_id)
+    {
 
-        $applications = Application:: where ('program_id',$program_id)->get();
+        $applications = Application::where('program_id', $program_id)->join('programs', 'programs.id', '=', 'applications.program_id')
+            ->select('applications.*', 'programs.pTitle')->get();
 
         $response = $applications;
-        return response($response,201);
+        return response($response, 201);
     }
 
 
 
-    function getStudentApplications($student_id){
-        $applications = Application:: where ('student_id',$student_id)
-        ->join('programs','programs.id','=','applications.program_id')
-        ->select('applications.*','programs.pTitle')->get();
+    function getStudentApplications($student_id)
+    {
+        $applications = Application::where('student_id', $student_id)
+            ->join('programs', 'programs.id', '=', 'applications.program_id')
+            ->select('applications.*', 'programs.pTitle')->get();
 
         $response = $applications;
-        return response($response,201);
+        return response($response, 201);
     }
 
 
     public function downloadFile($application_id)
-{
-    $application = Application::find($application_id);
+    {
+        $application = Application::find($application_id);
 
-    if (!$application) {
-        return response()->json(['message' => 'Application not found'], 404);
+        if (!$application) {
+            return response()->json(['message' => 'Application not found'], 404);
+        }
+
+        $filePath = 'public/StudentsCvs/' . $application->cv;
+        error_log($filePath);
+        if (!Storage::exists($filePath)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        return Storage::download($filePath);
     }
-
-    $filePath = 'public/StudentsCvs/' . $application->cv;
-    error_log($filePath);
-    if (!Storage::exists($filePath)) {
-        return response()->json(['message' => 'File not found'], 404);
-    }
-
-    return Storage::download($filePath);
-}
 }

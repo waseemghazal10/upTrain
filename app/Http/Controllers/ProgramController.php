@@ -21,6 +21,7 @@ class ProgramController extends Controller
     function getPrograms($field_id)
     {
         $programs = Program::where('programs.field_id', $field_id)
+            ->where ('programs.pStart_date' ,'>', now())
             ->join('branches', 'branches.id', '=', 'programs.branch_id')
             ->join('companies', 'companies.id', '=', 'programs.company_id')
             ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
@@ -44,7 +45,7 @@ class ProgramController extends Controller
 
                 // 'trainers.user_id'
             )->get();
-          
+
         $response = $programs;
 
         return response($response, 201);
@@ -66,6 +67,7 @@ class ProgramController extends Controller
 
         foreach ($programIds as $programId) {
             $program = Program::where('programs.id', $programId)
+                ->where ('programs.pStart_date' ,'>', now())
                 ->join('branches', 'branches.id', '=', 'programs.branch_id')
                 ->join('companies', 'companies.id', '=', 'programs.company_id')
                 ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
@@ -87,7 +89,7 @@ class ProgramController extends Controller
                     'trainers.tPhone_number',
                     'trainers.tPhoto'
                 )
-                ->first(); // Use "first()" to get a single program instead of "get()"
+                ->get();
 
             if ($program) {
                 $programs[] = $program;

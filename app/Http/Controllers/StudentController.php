@@ -70,7 +70,6 @@ class StudentController extends Controller
 
     function deleteStudent($email)
     {
-        error_log($email);
         $student = Student::join('users', 'users.id', '=', 'students.user_id')->where('users.email', $email)->first();
 
         if ($student) {
@@ -152,11 +151,10 @@ class StudentController extends Controller
         foreach ($students as $student) {
             $skillsStudents = SkillsStudents::where('student_id', $student_id)
                 ->join('skills', 'skills.id', '=', 'skills_students.skill_id')
-                // ->select('skName')
                 ->get();
 
             $response[] = [
-                'application' => $student,
+                'student' => $student,
                 'skills' => $skillsStudents
             ];
         }

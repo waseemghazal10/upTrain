@@ -9,6 +9,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SkillsController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TrainerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,18 +34,35 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/verify', [UserController::class, 'verify']);
 Route::post('/resendCode', [UserController::class, 'resendCode']);
 
+
+
+Route::post('/company/deleteTrainer/{trainer_id}', [TrainerController::class, 'deleteTrainer']);
+Route::post('/company/deleteProgram/{program_id}', [ProgramController::class, 'deleteProgram']);
+Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
+Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
+
+
+
 Route::post('/requestResetPassword', [UserController::class, 'requestReset']);//inside
 Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);//inside
 Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
+
+
+Route::post('/trainer/addTask', [TaskController::class, 'addTask']);
+Route::get('/getTrainerTasks/{trainer_id}', [TaskController::class, 'getTrainerTasks']);
+Route::get('/getProgramTasks/{program_id}', [TaskController::class, 'getProgramTasks']);
+Route::get('/getStudentTasks/{student_id}', [TaskController::class, 'getStudentTasks']);
+Route::delete('/trainer/deleteTask/{task_id}', [TaskController::class, 'deleteTask']);
 
 Route::get('/getProgramStudents/{program_id}', [StudentController::class, 'getProgramStudents']);
 Route::get('/getTrainerStudents/{trainer_id}', [StudentController::class, 'getTrainerStudents']);
 Route::get('/getCompanyStudents/{company_id}', [StudentController::class, 'getCompanyStudents']);
 
-Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCompanyTrainers']);
-Route::get('/getTrainerPrograms/{trainer_id}', [ProgramController::class, 'getTrainerPrograms']);//check if wepu;; can get the id
-Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
+
+Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCompanyTrainers']);
+Route::get('/getTrainerPrograms/{trainer_id}', [ProgramController::class, 'getTrainerPrograms']);
+Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
 
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
@@ -56,6 +74,7 @@ Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
 Route::get('/getUser/{student_id}', [StudentController::class, 'getUser']);
 
+
 Route::get('/getPrograms/{field_id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getRecommendedPrograms/{student_id}', [ProgramController::class, 'getRecommendedPrograms']);
 Route::get('/getProgramCompany/{name}', [CompanyController::class, 'getProgramCompany']);
@@ -66,12 +85,6 @@ Route::get('/getCompanies', [CompanyController::class, 'getCompanies']);
 Route::get('/getEmployees', [EmployeeController::class, 'getEmployees']);
 Route::get('/getAdmin', [EmployeeController::class, 'getAdmin']);
 Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
-
-
-Route::post('/company/deleteTrainer/{trainer_id}', [TrainerController::class, 'deleteTrainer']);
-Route::post('/company/deleteProgram/{program_id}', [ProgramController::class, 'deleteProgram']);
-Route::post('/company/addTrainer', [TrainerController::class, 'addTrainer']);
-Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 
 Route::get('/getApplications/{program_id}', [ApplicationController::class, 'getApplications']);

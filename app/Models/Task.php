@@ -14,19 +14,24 @@ class Task extends Model
         'taStatus',
         'taTitle',
         'taDescription',
-        'taStart_date',
-        'taEnd_date',
+        'taDeadline',
+        'program_id',
         'trainer_id'
     ];
 
 
     public function student()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class,'students_tasks','task_id','student_id');;
     }
 
     public function trainer()
     {
         return $this->belongsTo(Trainer::class);
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
 }

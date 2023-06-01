@@ -59,7 +59,7 @@ class Student extends Model
 
     public function task()
     {
-        return $this->belongsToMany(Task::class);
+        return $this->belongsToMany(Task::class,'students_tasks','student_id','task_id');
     }
 
     public function skill()

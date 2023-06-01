@@ -18,11 +18,13 @@ return new class extends Migration
             $table->integer('taStatus');
             $table->string('taTitle');
             $table->text('taDescription')->default("");
-            $table->date('taStart_date');
-            $table->date('taEnd_date');
+            $table->date('taDeadline');
 
             $table->unsignedBigInteger('trainer_id')->nullable();
             $table->foreign('trainer_id')->references('id')->on('trainers')->onDelete('set null');
+
+            $table->unsignedBigInteger('program_id')->nullable();
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('set null');
 
             $table->timestamps();
         });

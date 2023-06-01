@@ -17,6 +17,7 @@ class BranchController extends Controller
 
         return response($response, 201);
     }
+
     function getAllBranches()
     {
 

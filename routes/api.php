@@ -54,7 +54,7 @@ Route::get('/getAllBranches', [BranchController::class, 'getAllBranches']);
 Route::get('/getStudents/{field_id}', [StudentController::class, 'getStudents']);
 Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
-
+Route::get('/getUser/{student_id}', [StudentController::class, 'getUser']);
 
 Route::get('/getPrograms/{field_id}', [ProgramController::class, 'getPrograms']);
 Route::get('/getRecommendedPrograms/{student_id}', [ProgramController::class, 'getRecommendedPrograms']);
@@ -81,9 +81,7 @@ Route::get('/getStudentApplications/{student_id}', [ApplicationController::class
 
 ///////////////////////////////////////
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
-
-    Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
     Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);
     Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);
@@ -102,5 +100,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
     Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
+
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    
 
 });

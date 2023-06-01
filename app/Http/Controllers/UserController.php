@@ -114,7 +114,7 @@ class UserController extends Controller
                 'code.regex' => 'invalid-token',
             ]
         );
-        error_log($request->email);
+        // error_log($request->email);
         $user = User::where('email', $request->email)->first();
 
         if (!session('verification_' . $user->id) || (session('verification_' . $user->id) && time() - session('verification_' . $user->id) > 600)) {
@@ -301,6 +301,7 @@ class UserController extends Controller
             ]
         );
         $user = User::where('email', $request->email)->first();
+        $company = Company::where('cEmail',$request->email)->first();
         if ($user) {
             $code = random_int(0, 9999); // string 
             $code = str_pad($code, 4, 0, STR_PAD_LEFT);
@@ -326,7 +327,32 @@ class UserController extends Controller
             } catch (Exception $e) {
                 return response([], 400);
             }
-        } else {
+        } elseif($company){
+            $code = random_int(0, 9999);
+            $code = str_pad($code, 4, 0, STR_PAD_LEFT);
+            $company->reset_token = bcrypt($code);
+            $company->save();
+            $request->session()->put('reset_' . $company->id, time());
+            $email = new \SendGrid\Mail\Mail();
+            $email->setFrom(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+            $email->setSubject("Verify Your Email");
+            $email->addTo($company->cEmail, $company->cName);
+            $email->addContent(
+                "text/html",
+                view('emails.verification', ['code' => $code])->render()
+            );
+            $sendgrid = new \SendGrid(env('SENDGRID_API_KEY'));
+            try {
+                $sendgrid->send($email);
+                $response = [
+                    'message' => 'Email sent successfully',
+                    'email' => $company->cEmail
+                ];
+                return response($response, 201);
+            } catch (Exception $e) {
+                return response([], 400);
+            }
+        }else {
             $response = [
                 'errors' => [
                     'message' => array('email-not-found')

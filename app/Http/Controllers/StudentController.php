@@ -134,4 +134,34 @@ class StudentController extends Controller
         ];
         return response($response, 201);
     }
+
+    function getUser($student_id)
+    {
+        $students = Student::where('students.id', $student_id)
+            // ->join('students', 'students.id', '=', 'applications.student_id')
+            ->join('users', 'users.id', '=', 'students.user_id')
+            ->join('locations', 'locations.id', '=', 'users.location_id')
+            ->join('programs', 'programs.id', '=', 'students.program_id')
+            ->join('fields', 'fields.id', '=', 'students.field_id')
+            ->select('students.*','users.first_name', 'users.last_name', 'users.email', 'locations.locationName',
+            'locations.id AS location_id','fields.fName','programs.pTitle')
+            ->get();
+
+        $response = [];
+
+        foreach ($students as $student) {
+            $skillsStudents = SkillsStudents::where('student_id', $student_id)
+                ->join('skills', 'skills.id', '=', 'skills_students.skill_id')
+                // ->select('skName')
+                ->get();
+
+            $response[] = [
+                'application' => $student,
+                'skills' => $skillsStudents
+            ];
+        }
+
+        return response($response, 201);
+    }
+
 }

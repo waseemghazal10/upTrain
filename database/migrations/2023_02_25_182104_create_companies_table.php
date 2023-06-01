@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('cDescription')->default("");
             $table->string('cWebSite');
             $table->string('verification_token') -> default("");
+            $table->string('reset_token') -> default("");
             $table->rememberToken();
 
             $table->unsignedBigInteger('location_id')->nullable();

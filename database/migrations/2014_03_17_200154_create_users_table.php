@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('verification_token') -> default("");
+            $table->string('reset_token') -> default("");
             $table->rememberToken();
 
             $table->unsignedBigInteger('location_id')->nullable();

@@ -42,17 +42,6 @@ class ApplicationController extends Controller
             'student_id' => $request->student_id
         ]);
 
-        // $applications = Application::where('applications.program_id', $request->program_id)
-        //     ->where('applications.student_id', $request->student_id)
-        //     ->join('students', 'students.id', '=', 'applications.student_id')
-        //     ->join('users', 'users.id', '=', 'students.user_id')
-        //     ->join('locations', 'locations.id', '=', 'users.location_id')
-        //     ->select('applications.*', 'students.sPhone_number', 'users.first_name', 'users.last_name', 'users.email', 'locations.locationName')
-        //     ->first();
-
-        // $skillsStudent = skillsStudents::where('student_id', $request->student_id)->join('skills', 'skills.id', '=', 'skills_students.skill_id')
-        // ->select('skName')->get();
-
 
         $response = [
             'application' => $application,

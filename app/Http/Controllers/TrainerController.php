@@ -88,7 +88,7 @@ class TrainerController extends Controller
 
     function getCompanyTrainers($id)
     {
-        $trainers = Trainer::where('company_id', $id)->get();
+        $trainers = Trainer::where('company_id', $id)->join('users','users.id','trainers.user_id')->select('trainers.*','users.email','users.first_name','users.last_name')->get();
         $response = $trainers;
 
         return response($response, 201);

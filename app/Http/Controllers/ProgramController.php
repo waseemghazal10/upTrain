@@ -164,7 +164,7 @@ class ProgramController extends Controller
             'trainers.tPhone_number',
             'trainers.tPhoto'
         )
-        ->first();
+        ->get();
 
         $response = $programs;
 

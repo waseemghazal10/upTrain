@@ -42,7 +42,7 @@ Route::get('/getTrainerStudents/{trainer_id}', [StudentController::class, 'getTr
 Route::get('/getCompanyStudents/{company_id}', [StudentController::class, 'getCompanyStudents']);
 
 Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCompanyTrainers']);
-Route::get('/getTrainerPrograms/{email}', [ProgramController::class, 'getTrainerPrograms']);//check if wepu;; can get the id
+Route::get('/getTrainerPrograms/{trainer_id}', [ProgramController::class, 'getTrainerPrograms']);//check if wepu;; can get the id
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
 

@@ -17,4 +17,12 @@ class BranchController extends Controller
 
         return response($response, 201);
     }
+    function getAllBranches()
+    {
+
+        $branches = Branch::all();
+        $response = $branches;
+
+        return response($response, 201);
+    }
 }

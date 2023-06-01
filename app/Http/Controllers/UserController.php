@@ -271,7 +271,8 @@ class UserController extends Controller
 
         }
         else {
-            $company = Company::where('cEmail',$fields['email'])->join('locations','locations.id','companies.location_id')->select('companies.*','locations.locationName')->first();
+            $company = Company::where('cEmail',$fields['email'])->join('locations','locations.id','companies.location_id')
+            ->select('companies.*','locations.locationName')->first();
             if ($company){
                 if (!$company || !Hash::check($fields['password'], $company->cPassword)) {
                     $response = [

@@ -78,10 +78,11 @@ Route::get('/getStudentApplications/{student_id}', [ApplicationController::class
 
 
 
-////////////////////////////////////////
-    Route::post('/logout', [UserController::class, 'logout']);
-////
+///////////////////////////////////////
 
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
     Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);
     Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);
@@ -100,7 +101,5 @@ Route::get('/getStudentApplications/{student_id}', [ApplicationController::class
     Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
     Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    
 });

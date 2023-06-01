@@ -190,7 +190,7 @@ class UserController extends Controller
         );
 
         $user = User::where('email', $fields['email'])->first();
-        // error_log($user);
+
         if ($user) {
             if (!$user || !Hash::check($fields['password'], $user->password)) {
                 $response = [

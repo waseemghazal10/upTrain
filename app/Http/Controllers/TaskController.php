@@ -14,6 +14,7 @@ class TaskController extends Controller
         $fields = $request->validate([
             'title' => 'required',
             'deadline' => 'required',
+            'description' =>'required',
             'trainer_id' => 'required',
             'program_id' => 'required',
         ], [
@@ -24,6 +25,7 @@ class TaskController extends Controller
             'taTitle' => $fields['title'],
             'taStatus' => 0,
             'taDeadline' => $fields['deadline'],
+            'taDescription' => $fields['description'],
             'program_id' => $fields['program_id'],
             'trainer_id' => $fields['trainer_id'],
         ]);

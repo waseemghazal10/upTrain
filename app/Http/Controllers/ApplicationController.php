@@ -9,6 +9,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notification;
 
 class ApplicationController extends Controller
 {
@@ -108,6 +109,9 @@ class ApplicationController extends Controller
         }
         $application->status = 2;
         $application->save();
+
+        $this->sendApplicationNotification('Greeting,Your application in process');
+
         return Storage::download($filePath);
     }
 
@@ -121,6 +125,8 @@ class ApplicationController extends Controller
 
         $application->status = 3;
         $application->save();
+
+        $this->sendApplicationNotification('Congrats!,Your application accepted');
 
         $student = Student::find($application->student_id);
         $student-> program_id = $application->program_id;
@@ -145,6 +151,59 @@ class ApplicationController extends Controller
 
         $application->save();
 
+        $this->sendApplicationNotification('Sorry,Your application declined');
+        
         return response()->json(['message' => 'Application accepted succefully'], 201);
     }
+    
+
+    public function sendApplicationNotification(string $status)
+    {
+
+        // Retrieve student tokens from the database
+        // $tokens = User::pluck('verification_token')->toArray();
+
+        $SERVER_API_KEY = 'AAAAexnYYC8:APA91bEeYQkJrDzQwpGbVwbFFOH7pv5QuoU9BcVTv1FJCpkZmgCp4Qd2El0H_LbxNyMFdlpJLdUUZschLvgmrbT02v4Zt0Nmpwb3S9XNje-lhGI1BG3ekB2m2dMYdRpYggnjcpRVLK7W';
+
+        $token_1 = 'dq5nPlheTDGaoJSCKuwIhu:APA91bFBsgITYzbxhyYphGBQDbA5qmq17WFSIARqNViBDNHXOS9Xq1INUTiLF58U2LL3vNKi9hNocr_RhN9JZzRCyMiITVHbufPErEzYKdrL05bJ-rPKmD5GoDq-4eAF6rmdmY67-cRK';
+
+        $data = [
+            "registration_ids" => [
+                $token_1,
+                // $tokens
+            ],
+            "notification" => [
+
+                "title" => 'Application status updated',
+                "body" => $status,
+                "sound" => "default"
+            ],
+
+        ];
+       // Create a notification and add it to the database
+       $notification = new Notification();
+       $notification->title = 'Application status updated';
+       $notification->body = $status;
+       $notification->save();
+
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        dd($response);
+    }
+
 }

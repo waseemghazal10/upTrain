@@ -84,6 +84,7 @@ class TaskController extends Controller
         $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
 
         $tasks = Task::whereIn('tasks.id', $studentTasks)
+        ->where('tasks.taStatus',0)
         ->join('programs','programs.id','=','tasks.program_id')
         ->join('trainers','trainers.id','=','tasks.trainer_id')
         ->join('users','users.id','=','trainers.user_id')

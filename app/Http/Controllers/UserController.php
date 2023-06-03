@@ -60,7 +60,7 @@ class UserController extends Controller
             'last_name' => $fields['lastName'],
             'password' => bcrypt($fields['password']),
             'location_id' => $fields['location_id'],
-            'email_verified_at' => now(),
+            // 'email_verified_at' => now(),
         ]);
 
         $student = new Student();
@@ -105,7 +105,7 @@ class UserController extends Controller
     {
         $fields = $request->validate(
             [
-                'code' => 'required|size:6|regex:/^\d{6}$/',
+                'code' => 'required|size:4|regex:/^\d{4}$/',
                 'email' => 'required',
             ],
             [
@@ -366,10 +366,10 @@ class UserController extends Controller
     function verifyResetPassword(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-
+        error_log($user);
         $fields = $request->validate(
             [
-                'code' => 'required|size:6|regex:/^\d{6}$/',
+                'code' => 'required|size:4|regex:/^\d{4}$/',
             ],
             [
                 'required' => 'field-required',
@@ -377,6 +377,7 @@ class UserController extends Controller
                 'code.regex' => 'invalid-token',
             ]
         );
+        // error_log($request);
         if (!session('reset_' . $user->id) || (session('reset_' . $user->id) && time() - session('reset_' . $user->id) > 600)) {
             $response = [
                 'errors' => [
@@ -393,7 +394,7 @@ class UserController extends Controller
             ];
             return response($response, 400);
         }
-        $token = $user->createToken('sakankomToken')->plainTextToken;
+        $token = $user->createToken('upTrainToken')->plainTextToken;
         $response = [
             'message' => 'Verified code successfully',
             'token' => $token
@@ -405,14 +406,14 @@ class UserController extends Controller
     {
         $fields = $request->validate(
             [
-                'password' => 'required|min:8|max:32|regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,32}$/|confirmed'
+                'password' => 'required|min:8|max:32|'
             ],
             [
                 'password.required' => 'field-required',
-                'password.confirmed' => 'password-not-match',
+                // 'password.confirmed' => 'password-not-match',
                 'password.min' => 'password-length',
                 'password.max' => 'password-length',
-                'password.regex' => 'password-format',
+                // 'password.regex' => 'password-format',
             ]
         );
 

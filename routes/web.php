@@ -62,6 +62,7 @@ Route::get('/', function () {
 
 });
 
-Route::get('/loginUser', [UserController::class, 'loginUser']);
+// Route::get('/loginUser', [UserController::class, 'loginUser']);
 
-
+Route::post('/requestResetPassword', [UserController::class, 'requestReset']);
+Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);

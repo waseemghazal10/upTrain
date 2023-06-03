@@ -44,8 +44,7 @@ Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 
 
-Route::post('/requestResetPassword', [UserController::class, 'requestReset']);//inside
-Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);//inside
+
 
 
 
@@ -114,14 +113,12 @@ Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
 
 
 
-    Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
+    
 
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [UserController::class, 'logout']);
-
-    
-
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
 });

@@ -89,7 +89,7 @@ class TaskController extends Controller
             'tasks' => $tasks,
         ];
 
-        return response($response, 200);
+        return response($response, 201);
     }
 
     function deleteTask($task_id)
@@ -99,7 +99,7 @@ class TaskController extends Controller
 
         $response = 'Task deleted';
 
-        return response($response, 200);
+        return response($response, 201);
     }
 
     function taskDone($task_id)

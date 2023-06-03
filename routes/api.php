@@ -70,6 +70,7 @@ Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{field_id}', [BranchController::class, 'getbranches']);
 Route::get('/getAllBranches', [BranchController::class, 'getAllBranches']);
 Route::get('/getStudents/{field_id}', [StudentController::class, 'getStudents']);
+Route::get('/getTrainingStudents/{field_id}', [StudentController::class, 'getTrainingStudents']);
 Route::get('/getAllStudents', [StudentController::class, 'getAllStudents']);
 Route::get('/getLocations', [LocationController::class, 'getLocations']);
 Route::get('/getUser/{student_id}', [StudentController::class, 'getUser']);

@@ -15,6 +15,6 @@ class NotificationController extends Controller
             'notifications' => $notifications,
         ];
 
-        return response($response, 200);
+        return response($response, 201);
     }
 }

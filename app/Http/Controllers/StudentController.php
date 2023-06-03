@@ -16,8 +16,10 @@ class StudentController extends Controller
     function getStudents($field_id)
     {
         $students = Student::join('users', 'users.id', '=', 'students.user_id')->join('locations', 'locations.id', 'users.location_id')
-        ->join('fields', 'fields.id', 'students.field_id')->where('fields.id', $field_id)
-        ->select('students.*' , 'users.email', 'users.first_name', 'users.last_name', 'users.location_id','fields.fName', 'locations.locationName')->get();
+        ->join('fields', 'fields.id', 'students.field_id')
+        ->join('companies','companies.id','=','students.company_id')->where('fields.id', $field_id)
+        ->select('students.*' , 'users.email', 'users.first_name', 'users.last_name', 'users.location_id',
+        'fields.fName', 'locations.locationName','companies.cName')->get();
         $response =  $students;
 
         return response($response, 201);

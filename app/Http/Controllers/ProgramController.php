@@ -51,6 +51,38 @@ class ProgramController extends Controller
         return response($response, 201);
     }
 
+    function getProgram($program_id)
+    {
+        $program = Program::where ('programs.id' , $program_id)
+            ->join('branches', 'branches.id', '=', 'programs.branch_id')
+            ->join('companies', 'companies.id', '=', 'programs.company_id')
+            ->join('trainers', 'trainers.id', '=', 'programs.trainer_id')
+            ->join('users', 'users.id', '=', 'trainers.user_id')
+           ->with('skill')
+            ->select(
+                'programs.id',
+                'programs.pTitle',
+                'companies.cPhoto',
+                'companies.cName',
+                'programs.pStart_date',
+                'programs.field_id',
+                'programs.pEnd_date',
+                'branches.bName',
+                'programs.pDetails',
+                'users.first_name',
+                'users.last_name',
+                'users.email',
+                'trainers.tPhone_number',
+                'trainers.tPhoto'
+
+                // 'trainers.user_id'
+            )->get();
+
+        $response = $program;
+
+        return response($response, 201);
+    }
+
     function getRecommendedPrograms($student_id)
     {
         $skills = skillsStudents::where('student_id', $student_id)->pluck('skill_id')->toArray();

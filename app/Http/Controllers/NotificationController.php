@@ -12,10 +12,7 @@ class NotificationController extends Controller
     {
         $notifications = Notification::all();
 
-        $response = [
-            'notifications' => $notifications,
-        ];
-
-        return response($response, 201);
+      
+        return response($notifications, 201);
     }
 }

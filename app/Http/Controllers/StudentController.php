@@ -20,7 +20,7 @@ class StudentController extends Controller
         ->join('companies','companies.id','=','students.company_id')
         ->join('programs','programs.id','=','students.program_id')->where('fields.id', $field_id)
         ->select('students.*' , 'users.email', 'users.first_name', 'users.last_name', 'users.location_id',
-        'fields.fName', 'locations.locationName','companies.cName')->get();
+        'fields.fName', 'locations.locationName','companies.cName','programs.pTitle')->get();
         $response =  $students;
 
         return response($response, 201);

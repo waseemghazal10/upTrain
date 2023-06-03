@@ -19,6 +19,7 @@ class TaskController extends Controller
         $fields = $request->validate([
             'title' => 'required',
             'deadline' => 'required',
+            'description' => 'required',
             'trainer_id' => 'required',
             'program_id' => 'required',
         ], [
@@ -41,7 +42,7 @@ class TaskController extends Controller
 
         // Attach the students to the task
         $task->student()->attach($studentIds);
-        
+    
         $tokens = User::pluck('verification_token')->toArray();
         foreach ($tokens as $token) {
             error_log($token);

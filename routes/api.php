@@ -120,5 +120,5 @@ Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [UserController::class, 'logout']);
-    Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 });

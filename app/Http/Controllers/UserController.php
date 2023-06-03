@@ -366,7 +366,7 @@ class UserController extends Controller
     function verifyResetPassword(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        error_log($user);
+        // error_log($user);
         $fields = $request->validate(
             [
                 'code' => 'required|size:4|regex:/^\d{4}$/',

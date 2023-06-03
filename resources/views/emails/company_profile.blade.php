@@ -1,8 +1,10 @@
 
-To confirme your email<br><br>
+To confirme your account<br><br>
 
-Please click on Forget password  to change your password<br>
+Please change your password<br>
 <br>
+
+Your Password : {{ $password }}
 
 <br>Thanks,<br>
 {{ config('app.name') }}

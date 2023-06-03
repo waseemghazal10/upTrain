@@ -290,7 +290,7 @@ class UserController extends Controller
         return response($response, 201);
     }
 
-    function requestReset(Request $request) // link send token with url 
+    function requestReset(Request $request)
     {
         $fields = $request->validate(
             [
@@ -304,7 +304,7 @@ class UserController extends Controller
         $user = User::where('email', $request->email)->first();
         $company = Company::where('cEmail',$request->email)->first();
         if ($user) {
-            $code = random_int(0, 9999); // string 
+            $code = random_int(0, 9999);
             $code = str_pad($code, 4, 0, STR_PAD_LEFT);
             $user->reset_token = bcrypt($code);
             $user->save();

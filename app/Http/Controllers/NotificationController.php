@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\NotificationToken;
 use Illuminate\Http\Request;
 
@@ -9,12 +10,9 @@ class NotificationController extends Controller
 {
     function getNotifications(Request $requestd)
     {
-        $notifications = NotificationToken::all();
+        $notifications = Notification::all();
 
-        $response = [
-            'notifications' => $notifications,
-        ];
-
-        return response($response, 201);
+      
+        return response($notifications, 201);
     }
 }

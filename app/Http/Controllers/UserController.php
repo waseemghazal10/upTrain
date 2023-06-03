@@ -117,15 +117,15 @@ class UserController extends Controller
         // error_log($request->email);
         $user = User::where('email', $request->email)->first();
 
-        if (!session('verification_' . $user->id) || (session('verification_' . $user->id) && time() - session('verification_' . $user->id) > 600)) {
-            // error_log($request->session()->get('verification_1') . 'hi');
-            $response = [
-                'errors' => [
-                    'message' => array('expired-token')
-                ]
-            ];
-            return response($response, 400);
-        }
+        // if (!session('verification_' . $user->id) || (session('verification_' . $user->id) && time() - session('verification_' . $user->id) > 600)) {
+        //     // error_log($request->session()->get('verification_1') . 'hi');
+        //     $response = [
+        //         'errors' => [
+        //             'message' => array('expired-token')
+        //         ]
+        //     ];
+        //     return response($response, 400);
+        // }
         if (!Hash::check($request->code, $user->verification_token)) {
             $response = [
                 'errors' => [
@@ -424,10 +424,8 @@ class UserController extends Controller
         $user = User::where ('email',$fields['email'])->first();
 
         if (Hash::check($fields['password'], $user->password)) {
-            $response = [
-                'errors' => [
-                    'message' => array('password-duplicate')
-                ]
+            $response =[
+                'message' => 'password-duplicate'
             ];
             return response($response, 400);
         }
@@ -465,18 +463,14 @@ class UserController extends Controller
 
         if (!Hash::check($fields['old-password'], $user->password)) {
             $response = [
-                'errors' => [
-                    'message' => array('Please check your old password')
-                ]
+                'message' => 'Please check your old password'
             ];
             return response($response, 400);
         }
 
         if (Hash::check($fields['new-password'], $user->password)) {
             $response = [
-                'errors' => [
-                    'message' => array('password-duplicate')
-                ]
+                    'message' => 'password-duplicate'
             ];
             return response($response, 400);
         }

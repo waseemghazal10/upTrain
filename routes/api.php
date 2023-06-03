@@ -112,13 +112,15 @@ Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
     Route::post('/taskDone/{task_id}', [TaskController::class, 'taskDone']);
 
 
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 
-    
+    Route::post('/changePassword', [UserController::class, 'changePassword']);
+
 
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/logout', [UserController::class, 'logout']);
-    Route::post('/resetPassword', [UserController::class, 'resetPassword']);
+
 });

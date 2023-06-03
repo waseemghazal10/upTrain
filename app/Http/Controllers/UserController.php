@@ -406,11 +406,12 @@ class UserController extends Controller
     {
         $fields = $request->validate(
             [
-                'password' => 'required|min:8|max:32|'
+                'password' => 'required|min:8|max:32|',
+                'email' => 'required',
             ],
             [
                 'password.required' => 'field-required',
-                // 'password.confirmed' => 'password-not-match',
+                'email.email' => 'email-format',
                 'password.min' => 'password-length',
                 'password.max' => 'password-length',
                 // 'password.regex' => 'password-format',
@@ -418,7 +419,9 @@ class UserController extends Controller
         );
 
 
-        $user = auth()->user();
+        // $user = auth()->user();
+
+        $user = User::where ('email',$fields['email'])->first();
 
         if (Hash::check($fields['password'], $user->password)) {
             $response = [
@@ -439,6 +442,57 @@ class UserController extends Controller
 
 
         return response($response, 201);
+    }
+
+
+    function changePassword(Request $request)
+    {
+        $fields = $request->validate(
+            [
+                'new-password' => 'required|min:8|max:32|',
+                'old-password' => 'required|min:8|max:32|',
+                'email' => 'required',
+            ],
+            [
+                'password.required' => 'field-required',
+                'email.email' => 'email-format',
+                'password.min' => 'password-length',
+                'password.max' => 'password-length',
+            ]
+        );
+
+        $user = User::where ('email',$fields['email'])->first();
+
+        if (!Hash::check($fields['old-password'], $user->password)) {
+            $response = [
+                'errors' => [
+                    'message' => array('Please check your old password')
+                ]
+            ];
+            return response($response, 400);
+        }
+
+        if (Hash::check($fields['new-password'], $user->password)) {
+            $response = [
+                'errors' => [
+                    'message' => array('password-duplicate')
+                ]
+            ];
+            return response($response, 400);
+        }
+
+        $user->password = bcrypt($fields['new-password'] . '');
+        $user->save();
+        $user->tokens()->delete();
+
+
+        $response = [
+            'message' => 'Password changed successfully'
+        ];
+
+
+        return response($response, 201);
+
     }
 
     function logout(Request $request)

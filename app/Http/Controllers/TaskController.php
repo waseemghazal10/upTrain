@@ -114,7 +114,7 @@ class TaskController extends Controller
             return response()->json(['message' => 'Task not found'], 404);
         }
 
-        $task->status = 1;
+        $task->taStatus = 1;
         $task->save();
 
         $this->sendTaskNotification($task);

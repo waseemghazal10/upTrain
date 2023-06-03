@@ -147,4 +147,5 @@ class ApplicationController extends Controller
 
         return response()->json(['message' => 'Application accepted succefully'], 201);
     }
+    
 }

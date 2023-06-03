@@ -41,7 +41,7 @@ class TaskController extends Controller
 
         // Attach the students to the task
         $task->student()->attach($studentIds);
-        
+
         $tokens = User::pluck('verification_token')->toArray();
         foreach ($tokens as $token) {
             error_log($token);
@@ -106,9 +106,6 @@ class TaskController extends Controller
         $response = curl_exec($ch);
 
         dd($response);
-
-   
-
     }
 
 

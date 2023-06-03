@@ -46,7 +46,7 @@ Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 Route::post('/requestResetPassword', [UserController::class, 'requestReset']);//inside
 Route::post('/verifyResetPassword', [UserController::class, 'verifyResetPassword']);//inside
-Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
+
 
 
 Route::post('/trainer/addTask', [TaskController::class, 'addTask']);
@@ -92,13 +92,7 @@ Route::get('/getTrainers', [TrainerController::class, 'getTrainers']);
 Route::get('/getApplications/{program_id}', [ApplicationController::class, 'getApplications']);
 Route::get('/getStudentApplications/{student_id}', [ApplicationController::class, 'getStudentApplications']);
 
-
-
-
-///////////////////////////////////////
-
-Route::post('/logout', [UserController::class, 'logout']);
-    Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
+Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
     Route::post('/admin/deleteStudent/{email}', [StudentController::class, 'deleteStudent']);
     Route::delete('/admin/deleteCompany/{companyName}', [CompanyController::class, 'deleteCompany']);
     Route::delete('/admin/deleteEmployee/{email}', [EmployeeController::class, 'deleteEmployee']);
@@ -116,11 +110,17 @@ Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/acceptApplication/{application_id}', [ApplicationController::class, 'acceptApplication']);
     Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
-
     Route::post('/taskDone/{task_id}', [TaskController::class, 'taskDone']);
 
 
+
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);//inside
+
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::post('/logout', [UserController::class, 'logout']);
 
     
 

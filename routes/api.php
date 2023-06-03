@@ -92,6 +92,7 @@ Route::get('/getStudentApplications/{student_id}', [ApplicationController::class
 
 
 
+
 ///////////////////////////////////////
 
 Route::post('/logout', [UserController::class, 'logout']);

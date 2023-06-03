@@ -115,6 +115,8 @@ Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/declineApplication/{application_id}', [ApplicationController::class, 'declineApplication']);
 
 
+    Route::post('/taskDone/{task_id}', [TaskController::class, 'taskDone']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 

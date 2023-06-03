@@ -58,6 +58,67 @@ class TaskController extends Controller
     }
 
 
+
+    function getTrainerTasks($trainer_id)
+    {
+        $tasks = Task::where('tasks.trainer_id', $trainer_id)->get();
+
+        $response = $tasks;
+
+        return response($response, 201);
+    }
+
+
+    function getProgramTasks($program_id)
+    {
+        $tasks = Task::where('tasks.program_id', $program_id)->get();
+
+        $response = $tasks;
+
+        return response($response, 201);
+    }
+
+
+    function getStudentTasks($student_id)
+    {
+        $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
+
+        $tasks = Task::whereIn('id', $studentTasks)->get();
+
+        $response = [
+            'tasks' => $tasks,
+        ];
+
+        return response($response, 200);
+    }
+
+    function deleteTask($task_id)
+    {
+
+        $tasks = Task::find($task_id)->delete();
+
+        $response = 'Task deleted';
+
+        return response($response, 200);
+    }
+
+    function taskDone($task_id)
+    {
+        $task = Task::find($task_id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        $task->status = 1;
+        $task->save();
+
+        $this->sendTaskNotification($task);
+
+        return response()->json(['message' => 'Task done succefully'], 201);
+    }
+
+
     public function sendTaskNotification(Task $task)
     {
 
@@ -106,49 +167,5 @@ class TaskController extends Controller
         $response = curl_exec($ch);
 
         dd($response);
-    }
-
-
-    function getTrainerTasks($trainer_id)
-    {
-        $tasks = Task::where('tasks.trainer_id', $trainer_id)->get();
-
-        $response = $tasks;
-
-        return response($response, 201);
-    }
-
-
-    function getProgramTasks($program_id)
-    {
-        $tasks = Task::where('tasks.program_id', $program_id)->get();
-
-        $response = $tasks;
-
-        return response($response, 201);
-    }
-
-
-    function getStudentTasks($student_id)
-    {
-        $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
-
-        $tasks = Task::whereIn('id', $studentTasks)->get();
-
-        $response = [
-            'tasks' => $tasks,
-        ];
-
-        return response($response, 200);
-    }
-
-    function deleteTask($task_id)
-    {
-
-        $tasks = Task::find($task_id)->delete();
-
-        $response = 'Task deleted';
-
-        return response($response, 200);
     }
 }

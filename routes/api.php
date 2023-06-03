@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FieldsController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SkillsController;
 use App\Http\Controllers\StudentController;
@@ -64,7 +65,7 @@ Route::get('/getCompanyTrainers/{company_id}', [TrainerController::class, 'getCo
 Route::get('/getTrainerPrograms/{trainer_id}', [ProgramController::class, 'getTrainerPrograms']);
 Route::get('/getCompanyPrograms/{name}', [ProgramController::class, 'getCompanyPrograms']);
 
-
+Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
 Route::get('/getSkills', [SkillsController::class, 'getSkills']);
 Route::get('/getFields', [FieldsController::class, 'getFields']);
 Route::get('/getbranches/{field_id}', [BranchController::class, 'getbranches']);

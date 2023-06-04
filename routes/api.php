@@ -50,6 +50,7 @@ Route::post('/company/addProgram', [ProgramController::class, 'addProgram']);
 
 Route::post('/trainer/addTask', [TaskController::class, 'addTask']);
 Route::get('/getTrainerTasks/{trainer_id}', [TaskController::class, 'getTrainerTasks']);
+Route::get('/getDoneTask/{student_id}', [TaskController::class, 'getDoneTask']);
 Route::get('/getProgramTasks/{program_id}', [TaskController::class, 'getProgramTasks']);
 Route::get('/getStudentTasks/{student_id}', [TaskController::class, 'getStudentTasks']);
 Route::delete('/trainer/deleteTask/{task_id}', [TaskController::class, 'deleteTask']);

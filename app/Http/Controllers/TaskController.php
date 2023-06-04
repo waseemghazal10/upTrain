@@ -124,6 +124,17 @@ class TaskController extends Controller
     }
 
 
+    function getDoneTask($student_id)
+    {
+        $tasks = Task::where('tasks.student_id',$student_id)->get();
+
+        $response = [
+            'tasks' => $tasks,
+        ];
+
+        return response($response, 201);
+    }
+
     public function sendTaskNotification(Task $task)
     {
 

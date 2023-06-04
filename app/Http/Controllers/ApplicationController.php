@@ -31,7 +31,7 @@ class ApplicationController extends Controller
 
         $file = $request->file('pdf_file');
 
-        $filename = $student->first_name . '_' . $student->last_name . '_' . $request->program_id . '.';
+        $filename = $student->first_name . '_' . $student->last_name . '_' . $request->program_id . '.'. $file->getClientOriginalExtension();
 
         $path = $file->storeAs('public/StudentsCvs', $filename);
 
@@ -97,13 +97,12 @@ class ApplicationController extends Controller
     {
 
         $application = Application::find($application_id);
-
+        
         if (!$application) {
             return response()->json(['message' => 'Application not found'], 404);
         }
 
         $filePath = 'public/StudentsCvs/' . $application->cv;
-
         if (!Storage::exists($filePath)) {
             return response()->json(['message' => 'File not found'], 404);
         }

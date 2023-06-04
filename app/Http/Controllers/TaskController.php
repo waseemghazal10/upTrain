@@ -126,7 +126,10 @@ class TaskController extends Controller
 
     function getDoneTask($student_id)
     {
-        $tasks = Task::where('tasks.student_id',$student_id)->get();
+        $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
+
+        $tasks = Task::whereIn('tasks.id', $studentTasks)
+        ->where('tasks.taStatus',1)->get();
 
         $response = [
             'tasks' => $tasks,

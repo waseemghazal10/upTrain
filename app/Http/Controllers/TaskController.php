@@ -84,11 +84,11 @@ class TaskController extends Controller
         $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
 
         $tasks = Task::whereIn('tasks.id', $studentTasks)
-        ->where('tasks.taStatus',0)
-        ->join('programs','programs.id','=','tasks.program_id')
-        ->join('trainers','trainers.id','=','tasks.trainer_id')
-        ->join('users','users.id','=','trainers.user_id')
-        ->select('tasks.*','programs.pTitle','users.first_name','users.last_name')->get();
+            ->where('tasks.taStatus', 0)
+            ->join('programs', 'programs.id', '=', 'tasks.program_id')
+            ->join('trainers', 'trainers.id', '=', 'tasks.trainer_id')
+            ->join('users', 'users.id', '=', 'trainers.user_id')
+            ->select('tasks.*', 'programs.pTitle', 'users.first_name', 'users.last_name')->get();
 
         $response = [
             'tasks' => $tasks,
@@ -129,15 +129,14 @@ class TaskController extends Controller
         $studentTasks = studentsTasks::where('students_tasks.student_id', $student_id)->pluck('task_id');
 
         $tasks = Task::whereIn('tasks.id', $studentTasks)
-        ->where('tasks.taStatus',1)
-        ->join('programs','programs.id','=','tasks.program_id')
-        ->join('trainers','trainers.id','=','tasks.trainer_id')
-        ->join('users','users.id','=','trainers.user_id')
-        ->select('tasks.*','programs.pTitle','users.first_name','users.last_name')->get();
+            ->where('tasks.taStatus', 1)
+            ->join('programs', 'programs.id', '=', 'tasks.program_id')
+            ->join('trainers', 'trainers.id', '=', 'tasks.trainer_id')
+            ->join('users', 'users.id', '=', 'trainers.user_id')
+            ->select('tasks.*', 'programs.pTitle', 'users.first_name', 'users.last_name')->get();
 
-        $response = [
-            'tasks' => $tasks,
-        ];
+        $response =  $tasks;
+
 
         return response($response, 201);
     }
@@ -166,11 +165,11 @@ class TaskController extends Controller
             ],
 
         ];
-       // Create a notification and add it to the database
-       $notification = new Noti();
-       $notification->title = 'New Task Added';
-       $notification->body = $task->taTitle . ' ' . $task->taDescription . ' ' . ' ' . 'Deadline on: ' . $task->taDeadline;
-       $notification->save();
+        // Create a notification and add it to the database
+        $notification = new Noti();
+        $notification->title = 'New Task Added';
+        $notification->body = $task->taTitle . ' ' . $task->taDescription . ' ' . ' ' . 'Deadline on: ' . $task->taDeadline;
+        $notification->save();
 
         $dataString = json_encode($data);
 

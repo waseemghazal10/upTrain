@@ -118,11 +118,9 @@ Route::post('/admin/addEmployee', [EmployeeController::class, 'addEmployee']);
 
     Route::post('/changePassword', [UserController::class, 'changePassword']);
 
-
+    Route::post('/logout', [UserController::class, 'logout']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
-    Route::post('/logout', [UserController::class, 'logout']);
 
 });

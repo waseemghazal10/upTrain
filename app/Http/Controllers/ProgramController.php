@@ -89,7 +89,7 @@ class ProgramController extends Controller
 
         $url = Http::post('http://localhost:8080/recommendation/programs', [
             'skills' => $skills,
-            'top_n' => 10,
+            'top_n' => 8,
         ]);
 
         $data = $url['recommended_program_ids_and_distances'];
@@ -121,10 +121,12 @@ class ProgramController extends Controller
                     'trainers.tPhone_number',
                     'trainers.tPhoto'
                 )
-                ->get();
+                ->first();
+                // error_log($program);/
 
             if ($program) {
-                $programs[] = $program;
+                // error_log($program);
+                $programs []= $program;
             }
         }
 

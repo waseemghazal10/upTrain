@@ -10,7 +10,7 @@ class FieldsController extends Controller
 
     function getFields()
     {
-        $fields = Field::where('fields.id', '!=', '17')->join('colleges', 'colleges.id', 'fields.college_id')->select('fields.*','colleges.collegeName')->get();
+        $fields = Field::where('fields.id', '!=', '17')->join('colleges', 'colleges.id', 'fields.college_id')->join('employees','employees.field_id','=','fields.id')->join('users','users.id','=','employees.user_id')->select('fields.*','colleges.collegeName','users.first_name','users.last_name')->get();
         $response =  $fields;
 
         return response($response, 201);
